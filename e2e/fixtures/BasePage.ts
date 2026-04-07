@@ -110,7 +110,10 @@ export class NavigationPage extends BasePage {
     await this.tuitionLink.click();
   }
 
-  async verifyNavigationLinks() {
+  async verifyCurrentPage(expectedPath: string) {
+      await expect(this.page).toHaveURL(new RegExp(expectedPath));
+    }
+
     await expect(this.homeLink).toBeVisible();
     await expect(this.aboutLink).toBeVisible();
     await expect(this.contactLink).toBeVisible();
