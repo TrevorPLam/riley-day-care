@@ -105,9 +105,10 @@ export async function POST(request: NextRequest) {
         break;
 
       case "all":
-        cacheInvalidation.invalidateAllPages();
+        const allTags = Object.values(CACHE_TAGS);
+        cacheInvalidation.byTags(allTags);
         cacheMonitoring.logCacheOperation("manual-all-revalidation", undefined, undefined);
-        invalidatedItems = Object.values(CACHE_TAGS);
+        invalidatedItems = allTags;
         break;
 
       default:
