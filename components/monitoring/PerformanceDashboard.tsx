@@ -242,7 +242,7 @@ function CacheMetricsChart({ metrics }: { metrics: any }) {
             <span className="font-medium text-slate-900">{hitRate.toFixed(1)}%</span>
           </div>
           <div className="w-full bg-slate-200 rounded-full h-2 relative overflow-hidden">
-            <div className={`h-2 rounded-full transition-all duration-300 absolute top-0 left-0 bg-green-500 ${getWidthClass(hitRate)}`}></div>
+            <div className="h-2 rounded-full transition-all duration-300 absolute top-0 left-0 bg-green-500" style={{ width: `${hitRate}%` }}></div>
           </div>
         </div>
         
