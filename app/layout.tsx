@@ -6,7 +6,9 @@ import { Container } from "@/components/layout/Container";
 import { getLocalBusinessJsonLd } from "@/lib/seo/structuredData";
 import PlausibleProvider from "next-plausible";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const siteUrl =
+  rawSiteUrl && URL.canParse(rawSiteUrl) ? rawSiteUrl : "https://example.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
