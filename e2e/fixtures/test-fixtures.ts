@@ -63,7 +63,7 @@ export const customExpect = {
     expect(inputs.length).toBeGreaterThan(0)
     
     for (const input of inputs) {
-      const hasLabel = await input.locator('xpath=./ancestor::*[contains(@role, "label")] or ./preceding-sibling::label or ./following-sibling::label').count()
+      const hasLabel = await input.locator('xpath=./ancestor::label | ./preceding-sibling::label | ./following-sibling::label').count()
       expect(hasLabel).toBeGreaterThan(0)
     }
   },
