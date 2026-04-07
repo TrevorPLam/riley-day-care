@@ -353,7 +353,9 @@ class ConfigurationManager {
       failures.push(`Branches coverage ${metrics.coverage.branches}% below threshold ${thresholds.coverage.branches}%`)
     }
 
-    // Check performance thresholds
+    if (metrics.coverage.statements < thresholds.coverage.statements) {
+      failures.push(`Statements coverage ${metrics.coverage.statements}% below threshold ${thresholds.coverage.statements}%`)
+    }
     if (metrics.performance.responseTime > thresholds.performance.responseTime) {
       failures.push(`Response time ${metrics.performance.responseTime}ms above threshold ${thresholds.performance.responseTime}ms`)
     }
