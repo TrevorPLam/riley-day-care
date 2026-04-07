@@ -130,8 +130,8 @@ test.describe('Site Navigation', () => {
     await expect(page.locator('text=(972) 286-0357')).toBeVisible()
     
     // Test phone number link
-    const phoneLink = page.locator('href="tel:(972) 286-0357"')
-    await expect(phoneLink).toBeVisible()
+    const phoneLink = page.getByRole('link', { name: '(972) 286-0357' })
+    await expect(phoneLink).toHaveAttribute('href', 'tel:19722860357')
   })
 
   test('should handle enrollment CTA from different pages', async ({ page }) => {
