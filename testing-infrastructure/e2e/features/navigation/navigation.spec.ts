@@ -130,7 +130,7 @@ test.describe('Site Navigation', () => {
     await expect(page.locator('text=(972) 286-0357')).toBeVisible()
     
     // Test phone number link
-    const phoneLink = page.locator('href="tel:(972) 286-0357"')
+    const phoneLink = page.locator('a[href="tel:(972) 286-0357"]');
     await expect(phoneLink).toBeVisible()
   })
 
