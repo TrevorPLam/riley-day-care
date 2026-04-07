@@ -52,14 +52,16 @@ export function useResource<T>(resource: Resource<T>): T {
 
 // Enhanced data fetching with React 19 use API
 export function useFetch<T>(url: string, options?: RequestInit): T {
+  const cacheKey = `${url}:${JSON.stringify(options ?? {})}`;
   const resource = createResource(
-    fetch(url, options)
-      .then((res) => {
+    cachedFetch(cacheKey, () =>
+      fetch(url, options).then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         return res.json() as Promise<T>;
       })
+    )
   );
   
   return useResource(resource);
