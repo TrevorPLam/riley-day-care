@@ -110,7 +110,7 @@ test.describe('Enrollment Flow - Cross Browser', () => {
   ['chromium', 'firefox', 'webkit'].forEach(browserName => {
     test.describe(`${browserName} browser`, () => {
       test.use({ 
-        browsers: [browserName],
+        browserName: browserName as 'chromium' | 'firefox' | 'webkit',
         viewport: { width: 1280, height: 720 }
       })
 
