@@ -362,7 +362,9 @@ class ConfigurationManager {
     if (metrics.performance.firstContentfulPaint > thresholds.performance.firstContentfulPaint) {
       failures.push(`FCP ${metrics.performance.firstContentfulPaint}ms above threshold ${thresholds.performance.firstContentfulPaint}ms`)
     }
-
+    if (metrics.performance.largestContentfulPaint > thresholds.performance.largestContentfulPaint) {
+      failures.push(`LCP ${metrics.performance.largestContentfulPaint}ms above threshold ${thresholds.performance.largestContentfulPaint}ms`)
+    }
     // Check reliability thresholds
     if (metrics.reliability.passRate < thresholds.reliability.passRate) {
       failures.push(`Pass rate ${metrics.reliability.passRate}% below threshold ${thresholds.reliability.passRate}%`)
