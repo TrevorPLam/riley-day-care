@@ -181,7 +181,7 @@ test.describe('Navigation Flow - Accessibility', () => {
     
     // Test that important elements have proper labels
     const navigation = page.locator('nav')
-    await expect(navigation).toHaveAttribute('role', 'navigation')
+    await expect(page.getByRole('navigation')).toBeVisible()
     
     // Check that links have descriptive text
     const links = navigation.getByRole('link')
