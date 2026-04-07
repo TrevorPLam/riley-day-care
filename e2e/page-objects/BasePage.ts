@@ -134,7 +134,7 @@ export class NavigationPage extends BasePage {
   }
 
   async verifyCurrentPage(expectedPath: string): Promise<void> {
-    await expect(this.page).toHaveURL(new RegExp(expectedPath))
+    await expect(this.page).toHaveURL(url => url.pathname === expectedPath)
   }
 
   async verifyNavigationExists(): Promise<void> {
