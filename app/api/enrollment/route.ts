@@ -122,8 +122,12 @@ export async function POST(request: Request) {
     });
 
     // Invalidate enrollment-related caches after successful submission
-    cacheInvalidation.invalidateEnrollment();
-    cacheMonitoring.logCacheOperation("enrollment-success-cache-invalidation", "enrollment-api");
+    try {
+      cacheInvalidation.invalidateEnrollment();
+      cacheMonitoring.logCacheOperation("enrollment-success-cache-invalidation", "enrollment-api");
+    } catch (cacheError) {
+      console.error("Enrollment cache invalidation failed", cacheError);
+    }
 
     return NextResponse.json(
       { ok: true },
