@@ -8,10 +8,10 @@ import Link from "next/link";
 
 export default function EnrollmentError({
   error,
-  unstable_retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  reset: () => void;
 }) {
   useEffect(() => {
     // Log enrollment-specific error - replace with Sentry in future
