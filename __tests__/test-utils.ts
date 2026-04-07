@@ -19,9 +19,9 @@ export const createInvalidEnrollmentData = (field: string, value: any) => {
 }
 
 // Mock Next.js request/response objects
-export const createMockRequest = (body: any, headers = {}) => ({
+export const createMockRequest = (body: any, headers: Record<string, string> = {}) => ({
   json: vi.fn().mockResolvedValue(body),
-  headers: new Map(Object.entries(headers)),
+  headers: new Headers(headers),
 })
 
 export const createMockResponse = () => {
