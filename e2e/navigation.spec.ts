@@ -78,7 +78,7 @@ test.describe('Site Navigation', () => {
   test('should handle browser back and forward navigation', async ({ page }) => {
     // Navigate through multiple pages
     await page.goto('/')
-    await page.click('text=About')
+    await page.goto('/about')
     await page.click('text=Programs')
     await page.click('text=Tuition')
     
