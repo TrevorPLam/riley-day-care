@@ -13,6 +13,9 @@ afterEach(() => {
 })
 
 // Global error handler for unhandled promise rejections in tests
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason)
-})
+if (!(globalThis as { __vitestUnhandledRejectionHookInstalled?: boolean }).__vitestUnhandledRejectionHookInstalled) {
+  (globalThis as { __vitestUnhandledRejectionHookInstalled?: boolean }).__vitestUnhandledRejectionHookInstalled = true
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+  })
+}
