@@ -1,7 +1,53 @@
 "use client";
 
 import { useReportWebVitals } from 'next/web-vitals';
-import { webVitalsMonitoring } from '@/lib/monitoring';
+import * as Sentry from '@sentry/nextjs';
+
+const WEB_VITAL_THRESHOLDS: Record<string, number> = {
+  LCP: 2500,
+  FID: 100,
+  CLS: 0.1,
+  FCP: 1800,
+  TTFB: 800,
+  INP: 200,
+};
+
+function getThreshold(metricName: string): number {
+  return WEB_VITAL_THRESHOLDS[metricName] ?? 0;
+}
+
+function trackWebVital(metric: {
+  name: string;
+  value: number;
+  rating: 'good' | 'needs-improvement' | 'poor';
+  navigationType?: string;
+}) {
+  Sentry.metrics.gauge(`web_vitals.${metric.name.toLowerCase()}`, metric.value, {
+    rating: metric.rating,
+    navigation_type: metric.navigationType ?? 'unknown',
+  });
+
+  if (metric.rating === 'poor') {
+    Sentry.addBreadcrumb({
+      message: `Poor Web Vital: ${metric.name}`,
+      category: 'performance',
+      level: 'warning',
+      data: {
+        metric: metric.name,
+        value: metric.value,
+        rating: metric.rating,
+        threshold: getThreshold(metric.name),
+      },
+    });
+  }
+
+  if (metric.rating === 'poor' || metric.rating === 'needs-improvement') {
+    Sentry.captureMessage(
+      `Performance Issue: ${metric.name} is ${metric.rating} (${metric.value})`,
+      'warning'
+    );
+  }
+}
 
 /**
  * WebVitalsReporter Component
@@ -26,7 +72,7 @@ export function WebVitalsReporter() {
     };
 
     // Send to our monitoring system
-    webVitalsMonitoring.trackWebVital(performanceMetric);
+    trackWebVital(performanceMetric);
 
     // Optional: Log in development for debugging
     if (process.env.NODE_ENV === 'development') {
@@ -35,7 +81,7 @@ export function WebVitalsReporter() {
       console.log('Rating:', metric.rating);
       console.log('Delta:', metric.delta);
       console.log('Navigation Type:', metric.navigationType);
-      console.log('Threshold:', webVitalsMonitoring.getThreshold(metric.name));
+      console.log('Threshold:', getThreshold(metric.name));
       console.groupEnd();
     }
   });
@@ -63,7 +109,7 @@ export function useWebVitalsMonitoring() {
       timestamp: new Date().toISOString(),
     };
 
-    webVitalsMonitoring.trackWebVital(performanceMetric);
+    trackWebVital(performanceMetric);
 
     // Custom logic for specific metrics
     switch (metric.name) {
