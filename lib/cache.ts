@@ -104,8 +104,12 @@ export const cacheInvalidation = {
    * Invalidates cache by path (entire route)
    */
   byPath: (path: string) => {
-    console.log(`[Cache] Invalidating path: ${path}`);
-    revalidatePath(path);
+      const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+      if (normalizedPath.length <= 1) {
+        throw new Error("Invalid cache path");
+      }
+      console.log(`[Cache] Invalidating path: ${normalizedPath}`);
+      revalidatePath(normalizedPath);
   },
 
   /**
