@@ -234,11 +234,9 @@ describe('Enrollment Validation Schema', () => {
     test('should format field errors correctly', () => {
       const invalidData = createInvalidEnrollmentData('parentName', '')
       const result = enrollmentSchema.safeParse(invalidData)
-      
-      if (!result.success) {
-        const formattedError = formatZodErrors(result.error)
-        expect(formattedError).toContain('Parent/guardian name is required')
-      }
+      const validationError = expectValidationToFail(enrollmentSchema, invalidData)
+      const formattedError = formatZodErrors(validationError)
+      expect(formattedError).toContain('Parent/guardian name is required')
     })
 
     test('should return generic error for unknown issues', () => {
