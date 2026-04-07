@@ -60,7 +60,11 @@ export class EnrollmentPage extends BasePage {
     }
   }
 
-  async submitForm() {
+  async verifyPageLoaded() {
+      await expect(this.parentNameInput).toBeVisible();
+      await expect(this.submitButton).toBeVisible();
+    }
+
     await this.submitButton.click();
   }
 
