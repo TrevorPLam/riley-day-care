@@ -74,12 +74,12 @@ export async function sendEnrollmentEmail(payload: EnrollmentEmailPayload): Prom
       subject: "New enrollment inquiry - Riley Day Care",
       text: lines.join("\n")
     });
-    
+
     console.log("[email] Enrollment notification sent successfully");
     return true;
   } catch (error) {
     console.error("[email] Failed to send enrollment notification:", error);
-    return false;
+    throw error;
   }
 }
 
