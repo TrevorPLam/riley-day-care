@@ -1,4 +1,4 @@
-import { enrollmentSchema } from '@/lib/validation/enrollment'
+import { enrollmentSchema } from './lib/validation/enrollment'
 
 // Test specific problematic cases
 const testCases = [
