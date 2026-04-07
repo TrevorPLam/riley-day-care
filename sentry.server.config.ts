@@ -9,7 +9,7 @@ const tracesSampleRate = isProduction ? 0.1 : 1;
 const sendDefaultPii = process.env.SENTRY_SEND_DEFAULT_PII === "true";
 
 Sentry.init({
-  dsn: "https://e22512056ecaaefd7be04b6f1c0aea47@o4510591502319616.ingest.us.sentry.io/4511178353606656",
+  dsn: process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Define how likely traces are sampled. Use full sampling outside production and a reduced rate in production.
   tracesSampleRate,
