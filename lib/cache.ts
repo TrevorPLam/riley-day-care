@@ -130,16 +130,7 @@ export const cacheInvalidation = {
    * Invalidates all page caches (useful for major content updates)
    */
   invalidateAllPages: () => {
-    cacheInvalidation.byTags([
-      CACHE_TAGS.HOMEPAGE,
-      CACHE_TAGS.ABOUT,
-      CACHE_TAGS.CONTACT,
-      CACHE_TAGS.TUITION,
-      CACHE_TAGS.ENROLLMENT,
-      CACHE_TAGS.PRIVACY,
-      CACHE_TAGS.FAQ,
-      CACHE_TAGS.PROGRAMS,
-    ]);
+      cacheInvalidation.byTags(Object.values(CACHE_TAGS));
   },
 };
 
