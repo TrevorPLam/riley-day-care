@@ -4,7 +4,8 @@ import { devices } from '@playwright/test'
 test.describe('Enrollment Flow - Enterprise Grade', () => {
   test.beforeEach(async ({ enrollmentPage }) => {
     await enrollmentPage.navigateTo('/enrollment')
-    await enrollmentPage.verifyPageLoaded()
+    await enrollmentPage.waitForPageLoad()
+    await expect(enrollmentPage.page.locator('button[type="submit"]')).toBeVisible()
   })
 
   test('should submit enrollment form successfully with valid data', async ({ enrollmentPage, testDataFactory }) => {
