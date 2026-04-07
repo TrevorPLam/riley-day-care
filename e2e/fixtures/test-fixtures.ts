@@ -33,20 +33,20 @@ export class TestDataFactory {
 
 // Custom test fixtures with page objects
 type TestFixtures = {
-  enrollmentPage: import('./BasePage').EnrollmentPage
-  navigationPage: import('./BasePage').NavigationPage
+  enrollmentPage: import('../page-objects/BasePage').EnrollmentPage
+  navigationPage: import('../page-objects/BasePage').NavigationPage
   testDataFactory: typeof TestDataFactory
 }
 
 export const test = base.extend<TestFixtures>({
   enrollmentPage: async ({ page }, use) => {
-    const { EnrollmentPage } = await import('./BasePage')
+    const { EnrollmentPage } = await import('../page-objects/BasePage')
     const enrollmentPage = new EnrollmentPage(page)
     await use(enrollmentPage)
   },
 
   navigationPage: async ({ page }, use) => {
-    const { NavigationPage } = await import('./BasePage')
+    const { NavigationPage } = await import('../page-objects/BasePage')
     const navigationPage = new NavigationPage(page)
     await use(navigationPage)
   },
