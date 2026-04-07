@@ -40,7 +40,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="bg-white text-slate-900">
-        <WebVitalsReporter />
+        {/* WebVitalsReporter should be mounted from a client-safe monitoring module, not root layout */}
         <PlausibleProvider src={`${process.env.PLAUSIBLE_API_HOST ?? "https://plausible.io"}/js/script.js`}>
         <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/90 backdrop-blur">
           <Container className="flex h-16 items-center justify-between gap-4">
