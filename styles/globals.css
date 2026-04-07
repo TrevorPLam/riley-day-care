@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply bg-white text-slate-900 antialiased;
+}
+
+body {
+  @apply min-h-screen;
+}
+
+a {
+  @apply text-brand underline-offset-4 hover:underline;
+}
+
