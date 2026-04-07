@@ -33,20 +33,20 @@ export class TestDataFactory {
 
 // Custom test fixtures with page objects
 type TestFixtures = {
-  enrollmentPage: import('./BasePage').EnrollmentPage
-  navigationPage: import('./BasePage').NavigationPage
+  enrollmentPage: import('../page-objects/BasePage').EnrollmentPage
+  navigationPage: import('../page-objects/BasePage').NavigationPage
   testDataFactory: typeof TestDataFactory
 }
 
 export const test = base.extend<TestFixtures>({
   enrollmentPage: async ({ page }, use) => {
-    const { EnrollmentPage } = await import('./BasePage')
+    const { EnrollmentPage } = await import('../page-objects/BasePage')
     const enrollmentPage = new EnrollmentPage(page)
     await use(enrollmentPage)
   },
 
   navigationPage: async ({ page }, use) => {
-    const { NavigationPage } = await import('./BasePage')
+    const { NavigationPage } = await import('../page-objects/BasePage')
     const navigationPage = new NavigationPage(page)
     await use(navigationPage)
   },
@@ -63,7 +63,7 @@ export const customExpect = {
     expect(inputs.length).toBeGreaterThan(0)
     
     for (const input of inputs) {
-      const hasLabel = await input.locator('xpath=./ancestor::*[contains(@role, "label")] or ./preceding-sibling::label or ./following-sibling::label').count()
+      const hasLabel = await input.locator('xpath=./ancestor::label | ./preceding-sibling::label | ./following-sibling::label').count()
       expect(hasLabel).toBeGreaterThan(0)
     }
   },
@@ -78,7 +78,7 @@ export const customExpect = {
     
     for (let i = 0; i < linkCount; i++) {
       const link = links.nth(i)
-      await expect(link).toHaveAttribute('href')
+      await expect(link).toHaveAttribute('href', /.+/)
       await expect(link).not.toBeEmpty()
     }
   },

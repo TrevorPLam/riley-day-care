@@ -3,7 +3,7 @@
  * Comprehensive metrics, performance tracking, and quality gate enforcement for unit tests
  */
 
-import { Reporter, Vitest, Task, FileTask } from 'vitest/node'
+import { Reporter, Vitest } from 'vitest/node'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { configManager } from '../config/test-config'
@@ -104,7 +104,7 @@ class AdvancedVitestReporter implements Reporter {
     console.log(`AI Healing: ${config.features.aiHealing}`)
   }
 
-  async onFilesStart(files: FileTask[]): Promise<void> {
+  async onFilesStart(files: any[]): Promise<void> {
     console.log(`Processing ${files.length} test files...`)
     
     // Initialize suite metrics
@@ -131,7 +131,7 @@ class AdvancedVitestReporter implements Reporter {
     }
   }
 
-  async onTaskUpdate(task: Task): Promise<void> {
+  async onTaskUpdate(task: any): Promise<void> {
     if (task.type === 'test' && task.result) {
       const suiteName = this.getSuiteName(task.file?.name || '')
       const suite = this.suiteMetrics.get(suiteName)
@@ -147,7 +147,7 @@ class AdvancedVitestReporter implements Reporter {
         duration: task.result?.duration || 0,
         startTime: task.result?.startTime ? new Date(task.result.startTime).getTime() : Date.now(),
         endTime: task.result?.startTime ? new Date(task.result.startTime).getTime() + (task.result?.duration || 0) : Date.now(),
-        errors: task.result?.errors?.map(error => ({
+        errors: task.result?.errors?.map((error: any) => ({
           message: error.message,
           stack: error.stack,
           location: error.location
@@ -178,7 +178,7 @@ class AdvancedVitestReporter implements Reporter {
       // Cache test result
       await cacheManager.cacheTestResult(task.name, {
         testName: task.name,
-        status: testMetrics.status,
+        status: testMetrics.status === 'pass' ? 'passed' as const : testMetrics.status === 'fail' ? 'failed' as const : 'skipped' as const,
         duration: testMetrics.duration,
         error: testMetrics.errors[0]?.message,
         metadata: {
@@ -192,7 +192,7 @@ class AdvancedVitestReporter implements Reporter {
     }
   }
 
-  async onFinished(files: FileTask[]): Promise<void> {
+  async onFinished(files: any[]): Promise<void> {
     this.endTime = Date.now()
     
     console.log('Unit test execution completed. Generating comprehensive report...')
@@ -251,7 +251,7 @@ class AdvancedVitestReporter implements Reporter {
     }
   }
 
-  private async generateExecutionSummary(files: FileTask[]): Promise<UnitExecutionSummary> {
+  private async generateExecutionSummary(files: any[]): Promise<UnitExecutionSummary> {
     const config = configManager.getConfig()
     const thresholds = getThresholds(config.environment.name)
     const cacheStats = cacheManager.getStats()

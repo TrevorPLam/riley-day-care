@@ -222,13 +222,10 @@ describe('Enrollment Validation Schema', () => {
   describe('TypeScript Type Inference', () => {
     test('should correctly infer TypeScript type', () => {
       const validData = createMockEnrollmentData()
-      const result = enrollmentSchema.safeParse(validData)
-      
-      if (result.success) {
-        const typedData: EnrollmentData = result.data
-        expect(typedData.parentName).toBe(validData.parentName)
-        expect(typedData.childName).toBe(validData.childName)
-        expect(typedData.email).toBe(validData.email)
+      const typedData: EnrollmentData = expectValidationToPass(enrollmentSchema, validData)
+      expect(typedData.parentName).toBe(validData.parentName)
+      expect(typedData.childName).toBe(validData.childName)
+      expect(typedData.email).toBe(validData.email)
       }
     })
   })
@@ -237,11 +234,9 @@ describe('Enrollment Validation Schema', () => {
     test('should format field errors correctly', () => {
       const invalidData = createInvalidEnrollmentData('parentName', '')
       const result = enrollmentSchema.safeParse(invalidData)
-      
-      if (!result.success) {
-        const formattedError = formatZodErrors(result.error)
-        expect(formattedError).toContain('Parent/guardian name is required')
-      }
+      const validationError = expectValidationToFail(enrollmentSchema, invalidData)
+      const formattedError = formatZodErrors(validationError)
+      expect(formattedError).toContain('Parent/guardian name is required')
     })
 
     test('should return generic error for unknown issues', () => {
@@ -265,12 +260,10 @@ describe('Enrollment Validation Schema', () => {
         childName: '',
         email: 'invalid'
       }
-      const result = enrollmentSchema.safeParse(invalidData)
-      
-      if (!result.success) {
-        const formattedError = formatZodErrors(result.error)
-        // Should return one of the field errors, not all of them
-        expect(formattedError).toMatch(/(Parent\/guardian name is required|Child's name is required|Please enter a valid email address)/)
+      const validationError = expectValidationToFail(enrollmentSchema, invalidData)
+      const formattedError = formatZodErrors(validationError)
+      // Should return one of the field errors, not all of them
+      expect(formattedError).toMatch(/(Parent\/guardian name is required|Child's name is required|Please enter a valid email address)/)
       }
     })
   })

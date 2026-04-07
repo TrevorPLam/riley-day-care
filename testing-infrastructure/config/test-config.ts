@@ -76,7 +76,7 @@ class ConfigurationManager {
         timeout: 30000,
         retries: 0,
         parallel: 4,
-        headless: false,
+        headless: true,
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
         video: false

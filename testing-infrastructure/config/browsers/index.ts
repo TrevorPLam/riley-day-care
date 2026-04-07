@@ -218,7 +218,7 @@ export function getBrowserProfile(profileName: string): BrowserProfile {
 }
 
 export function getBrowserSet(setName: string): BrowserProfile[] {
-  const set = browserSets[setName]
+  const set = browserSets[setName as keyof typeof browserSets]
   if (!set) {
     throw new Error(`Browser set '${setName}' not found`)
   }

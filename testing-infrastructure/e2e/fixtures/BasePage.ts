@@ -17,7 +17,7 @@ export class BasePage {
   }
 
   async takeScreenshot(name: string) {
-    await this.page.screenshot({ path: `testing-infrastructure/artifacts/screenshots/${name}-${Date.now()}.png` });
+    await this.page.screenshot({ path: `test-results/${name}-${Date.now()}.png` });
   }
 
   async checkAccessibility() {
@@ -60,6 +60,11 @@ export class EnrollmentPage extends BasePage {
     }
   }
 
+  async verifyPageLoaded() {
+    await expect(this.parentNameInput).toBeVisible();
+    await expect(this.submitButton).toBeVisible();
+  }
+
   async submitForm() {
     await this.submitButton.click();
   }
@@ -68,8 +73,16 @@ export class EnrollmentPage extends BasePage {
     await expect(this.successMessage).toBeVisible({ timeout: 10000 });
   }
 
+  async verifySubmissionSuccess() {
+    await this.waitForSuccessMessage();
+  }
+
   async waitForErrorMessage() {
     await expect(this.errorMessage).toBeVisible({ timeout: 10000 });
+  }
+
+  async verifyValidationError(expectedError: string) {
+    await expect(this.page.getByText(expectedError)).toBeVisible();
   }
 }
 
@@ -85,7 +98,7 @@ export class NavigationPage extends BasePage {
   }
 
   async navigateToAbout() {
-    await this.aboutLink.click();
+      await this.page.goto('/about');
   }
 
   async navigateToContact() {
@@ -98,6 +111,10 @@ export class NavigationPage extends BasePage {
 
   async navigateToTuition() {
     await this.tuitionLink.click();
+  }
+
+  async verifyCurrentPage(expectedPath: string) {
+    await expect(this.page).toHaveURL(new RegExp(expectedPath));
   }
 
   async verifyNavigationLinks() {

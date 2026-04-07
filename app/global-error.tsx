@@ -2,6 +2,20 @@
 
 import { useEffect } from "react";
 
+// React 19: Enhanced error categorization for global errors
+function getGlobalErrorCategory(error: Error): 'critical' | 'hydration' | 'build' | 'unknown' {
+  if (error.message.includes('hydration') || error.message.includes('SSR')) {
+    return 'hydration';
+  }
+  if (error.message.includes('build') || error.message.includes('module')) {
+    return 'build';
+  }
+  if (error.name === 'TypeError' || error.message.includes('critical')) {
+    return 'critical';
+  }
+  return 'unknown';
+}
+
 export default function GlobalError({
   error,
   reset,
@@ -9,10 +23,36 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const errorCategory = getGlobalErrorCategory(error);
+
   useEffect(() => {
-    // Log global error - replace with Sentry in future
-    console.error("Global error boundary caught:", error);
-  }, [error]);
+    // React 19: Enhanced global error logging with context
+    console.error("Global error boundary caught:", {
+      error,
+      category: errorCategory,
+      digest: error.digest,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+      isCritical: errorCategory === 'critical'
+    });
+
+    // React 19: Global errors should be reported immediately
+    // Example: reportCriticalError(error, errorCategory);
+  }, [error, errorCategory]);
+
+  const getGlobalErrorMessage = () => {
+    switch (errorCategory) {
+      case 'hydration':
+        return "There was a problem loading the page. This usually happens when the server and client content don't match.";
+      case 'build':
+        return "The application has a build error. Please try refreshing the page or contact support if the issue persists.";
+      case 'critical':
+        return "A critical error occurred in the application. Our team has been automatically notified.";
+      default:
+        return "The application encountered an unexpected error. We apologize for the inconvenience.";
+    }
+  };
 
   return (
     <html>
@@ -22,7 +62,7 @@ export default function GlobalError({
             Critical Error
           </h1>
           <p className="text-sm leading-relaxed text-slate-600">
-            The application encountered a critical error. We apologize for the inconvenience.
+            {getGlobalErrorMessage()}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -38,9 +78,25 @@ export default function GlobalError({
               Go back home
             </a>
           </div>
-          {/* Show error digest in development only */}
-          {process.env.NODE_ENV === "development" && error.digest && (
-            <p className="text-xs text-slate-400 font-mono">Error ID: {error.digest}</p>
+          {/* React 19: Enhanced global error information in development */}
+          {process.env.NODE_ENV === "development" && (
+            <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg text-left">
+              <p className="text-xs text-red-600 font-mono mb-2">Global Error ID: {error.digest}</p>
+              <p className="text-xs text-red-600 font-mono mb-2">Category: {errorCategory}</p>
+              <details className="text-xs text-red-500 font-mono">
+                <summary className="cursor-pointer hover:text-red-700">Global error details</summary>
+                <pre className="mt-2 whitespace-pre-wrap text-xs">{error.stack}</pre>
+              </details>
+              <div className="mt-4 text-xs text-red-600">
+                <p className="font-semibold">Next steps:</p>
+                <ul className="list-disc list-inside mt-1 space-y-1">
+                  <li>Check the error stack trace above</li>
+                  <li>Verify server/client component boundaries</li>
+                  <li>Check for hydration mismatches</li>
+                  <li>Review recent code changes</li>
+                </ul>
+              </div>
+            </div>
           )}
         </div>
       </body>

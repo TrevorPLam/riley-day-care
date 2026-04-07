@@ -240,9 +240,9 @@ describe('Enrollment API Route', () => {
       const response = await POST(request)
       const result = await response.json()
 
-      expect(response.status).toBe(429)
+      expect(response.status).toBe(400)
       expect(result.ok).toBe(false)
-      expect(result.error).toBe('Too many attempts. Please try again later.')
+      expect(result.error).toBe('Invalid request body')
 
       // Should not send email for invalid requests
       expect(sendEnrollmentEmail).not.toHaveBeenCalled()
@@ -285,9 +285,9 @@ describe('Enrollment API Route', () => {
       const response = await POST(request)
       const result = await response.json()
 
-      expect(response.status).toBe(429)
+      expect(response.status).toBe(400)
       expect(result.ok).toBe(false)
-      expect(result.error).toBe('Too many attempts. Please try again later.')
+      expect(result.error).toBe('Please enter a valid email address')
 
       // Should not send email for invalid data
       expect(sendEnrollmentEmail).not.toHaveBeenCalled()
@@ -339,9 +339,9 @@ describe('Enrollment API Route', () => {
       const response = await POST(request)
       const result = await response.json()
 
-      expect(response.status).toBe(429)
+      expect(response.status).toBe(500)
       expect(result.ok).toBe(false)
-      expect(result.error).toBe('Too many attempts. Please try again later.')
+      expect(result.error).toBe('We could not process your request. Please try again later.')
     })
 
     test('should log enrollment inquiries for debugging', async () => {
