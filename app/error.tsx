@@ -6,6 +6,23 @@ import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/shared/Button";
 import Link from "next/link";
 
+// React 19: Enhanced error categorization
+function getErrorCategory(error: Error): 'network' | 'rendering' | 'validation' | 'unknown' {
+  const message = error.message.toLowerCase();
+
+  if (message.includes('fetch') || message.includes('network')) {
+    return 'network';
+  }
+  if (message.includes('render') || error.name === 'TypeError') {
+    return 'rendering';
+  }
+  if (message.includes('validation') || message.includes('required')) {
+  if (error.message.includes('validation') || error.message.includes('required')) {
+    return 'validation';
+  }
+  return 'unknown';
+}
+
 export default function ErrorBoundary({
   error,
   reset,
@@ -13,10 +30,35 @@ export default function ErrorBoundary({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const errorCategory = getErrorCategory(error);
+
   useEffect(() => {
-    // Log error - replace with Sentry in future
-    console.error("Error boundary caught:", error);
-  }, [error]);
+    // React 19: Enhanced error logging with categorization
+    console.error("Error boundary caught:", {
+      error,
+      category: errorCategory,
+      digest: error.digest,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href
+    });
+
+    // React 19: Could integrate with error reporting service here
+    // Example: reportError(error, errorCategory);
+  }, [error, errorCategory]);
+
+  const getErrorMessage = () => {
+    switch (errorCategory) {
+      case 'network':
+        return "There was a problem connecting to our services. Please check your internet connection and try again.";
+      case 'rendering':
+        return "Something went wrong while displaying this page. Our team has been notified.";
+      case 'validation':
+        return "There was an issue with the information provided. Please check your input and try again.";
+      default:
+        return "We apologize for the inconvenience. Our team has been notified and we're working to fix the issue.";
+    }
+  };
 
   return (
     <Section>
@@ -25,7 +67,7 @@ export default function ErrorBoundary({
           Something went wrong
         </h1>
         <p className="text-sm leading-relaxed text-slate-600 max-w-md mx-auto">
-          We apologize for the inconvenience. Our team has been notified and we&apos;re working to fix the issue.
+          {getErrorMessage()}
         </p>
         <div className="flex gap-4 justify-center">
           <Button onClick={reset} variant="primary">
@@ -35,9 +77,16 @@ export default function ErrorBoundary({
             Go back home
           </Link>
         </div>
-        {/* Show error digest in development only */}
-        {process.env.NODE_ENV === "development" && error.digest && (
-          <p className="text-xs text-slate-400 font-mono">Error ID: {error.digest}</p>
+        {/* React 19: Enhanced error information in development */}
+        {process.env.NODE_ENV === "development" && (
+          <div className="mt-8 p-4 bg-slate-100 rounded-lg text-left">
+            <p className="text-xs text-slate-600 font-mono mb-2">Error ID: {error.digest}</p>
+            <p className="text-xs text-slate-600 font-mono mb-2">Category: {errorCategory}</p>
+            <details className="text-xs text-slate-500 font-mono">
+              <summary className="cursor-pointer hover:text-slate-700">Error details</summary>
+              <pre className="mt-2 whitespace-pre-wrap">{error.stack}</pre>
+            </details>
+          </div>
         )}
       </Container>
     </Section>

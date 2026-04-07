@@ -196,10 +196,11 @@ class SelfHealingManager {
   }
 
   private async extractElementSignature(element: ElementHandle): Promise<ElementSignature> {
-    const properties = await element.evaluate((el) => {
+    const properties = await element.evaluate((el: HTMLElement) => {
       const attrs: Record<string, string> = {}
-      for (const attr of el.attributes) {
-        attrs[attr.name] = attr.value
+      const attributeNames = Array.from(el.attributes)
+      for (const attr of attributeNames) {
+        attrs[attr.name] = attr.value || ''
       }
 
       return {
@@ -269,7 +270,7 @@ class SelfHealingManager {
         return `${getXPath(node.parentNode as Element)}/${node.tagName.toLowerCase()}[${ix + 1}]`
       }
 
-      return getXPath(el)
+      return getXPath(el as Element)
     })
   }
 
@@ -289,13 +290,13 @@ class SelfHealingManager {
             path.unshift(selector)
             break
           } else {
-            let sibling = node
+            let sibling = node.previousElementSibling
             let nth = 1
-            
-            while (sibling = sibling.previousElementSibling) {
+            while (sibling) {
               if (sibling.nodeName.toLowerCase() === selector) {
                 nth++
               }
+              sibling = sibling.previousElementSibling
             }
             
             if (nth !== 1) {
@@ -310,7 +311,7 @@ class SelfHealingManager {
         return path.join(' > ')
       }
 
-      return getCSSSelector(el)
+      return getCSSSelector(el as Element)
     })
   }
 
@@ -559,17 +560,17 @@ class SelfHealingManager {
     }
 
     // Take screenshot of element
-    const screenshot = await element.screenshot({ encoding: 'base64' })
+    const screenshot = await element.screenshot()
     
     // Generate visual hash
-    const visualHash = this.generateVisualHash(screenshot)
+    const visualHash = this.generateVisualHash(screenshot.toString('base64'))
 
     // Extract colors and text regions
     const colors = await this.extractColors(element)
     const textRegions = await this.extractTextRegions(element)
 
     return {
-      screenshot,
+      screenshot: screenshot.toString('base64'),
       boundingBox,
       visualHash,
       colors,

@@ -1,40 +1,50 @@
-import { type FullConfig } from '@playwright/test'
-import fs from 'node:fs/promises'
-import path from 'node:path'
+import { FullConfig } from '@playwright/test'
 
 async function globalTeardown(config: FullConfig) {
   console.log('Cleaning up test environment...')
-
-  const artifactsRoot = path.join('testing-infrastructure', 'artifacts')
-  const testResultsDir = path.join(artifactsRoot, 'test-results')
-
+  
+  // Clean up test data if needed
+  // For example: clear test database, stop mock servers, etc.
+  
+  // Clean up temporary files
+  const fs = await import('fs/promises')
+  const path = await import('path')
+  
+  // Clean up old test results (keep last 5 runs)
   try {
+    const testResultsDir = 'testing-infrastructure/artifacts/test-results'
     const files = await fs.readdir(testResultsDir)
-
+    
+    // Get only directories (test run folders)
+    const directories = files.filter(async (file) => {
+      const filePath = path.join(testResultsDir, file)
+      const stats = await fs.stat(filePath)
+      return stats.isDirectory()
+    })
+    
+    // Sort by modification time and keep only the most recent 5
     const dirsWithStats = await Promise.all(
-      files.map(async (file) => {
-        const dirPath = path.join(testResultsDir, file)
+      directories.map(async (dir) => {
+        const dirPath = path.join(testResultsDir, dir)
         const stats = await fs.stat(dirPath)
-        return stats.isDirectory() ? { name: file, mtime: stats.mtime } : null
+        return { name: dir, mtime: stats.mtime }
       })
     )
-
-    const directories = dirsWithStats
-      .filter((entry): entry is { name: string; mtime: Date } => entry !== null)
-      .sort((a, b) => b.mtime.getTime() - a.mtime.getTime())
-
-    for (let i = 5; i < directories.length; i++) {
-      const dirToRemove = path.join(testResultsDir, directories[i].name)
+    
+    dirsWithStats.sort((a, b) => b.mtime.getTime() - a.mtime.getTime())
+    
+    // Remove old directories
+    for (let i = 5; i < dirsWithStats.length; i++) {
+      const dirToRemove = path.join(testResultsDir, dirsWithStats[i].name)
       await fs.rm(dirToRemove, { recursive: true, force: true })
-      console.log(`Removed old test results: ${directories[i].name}`)
+      console.log(`Removed old test results: ${dirsWithStats[i].name}`)
     }
-  } catch {
+  } catch (error) {
     console.log('No old test results to clean up or cleanup failed')
   }
-
+  
+  // Generate test summary report
   try {
-    await fs.mkdir(path.join(artifactsRoot, 'reports'), { recursive: true })
-
     const testSummary = {
       timestamp: new Date().toISOString(),
       config: {
@@ -47,17 +57,17 @@ async function globalTeardown(config: FullConfig) {
         ci: process.env.CI || 'false'
       }
     }
-
+    
     await fs.writeFile(
-      path.join(artifactsRoot, 'reports', 'playwright-summary.json'),
+      'testing-infrastructure/artifacts/test-summary.json',
       JSON.stringify(testSummary, null, 2)
     )
-
+    
     console.log('Test summary report generated')
   } catch (error) {
     console.log('Failed to generate test summary:', error)
   }
-
+  
   console.log('Test environment cleanup completed')
 }
 

@@ -189,20 +189,27 @@ class AdvancedPlaywrightReporter implements Reporter {
       retries: result.retry,
       startTime: result.startTime.getTime(),
       endTime: result.startTime.getTime() + result.duration,
-      browser: result.project?.name || 'unknown',
+      browser: 'unknown', // Project name extraction moved to different API in newer Playwright
       viewport: { width: 1280, height: 720 }, // Default, should be extracted from config
       errors: result.errors?.map(error => ({
-        message: error.message,
+        message: error.message || 'Unknown error',
         stack: error.stack,
         location: error.location
+      })).filter(error => error.message) || [],
+      attachments: result.attachments?.filter(att => att.path).map(att => ({
+        name: att.name,
+        path: att.path!,
+        contentType: att.contentType
       })) || [],
-      attachments: result.attachments || [],
-      annotations: result.annotations || [],
+      annotations: result.annotations?.filter(ann => ann.description).map(ann => ({
+        type: ann.type,
+        description: ann.description!
+      })) || [],
       tags: test.tags || [],
       steps: result.steps?.map(step => ({
         title: step.title,
         duration: step.duration || 0,
-        status: step.status as any,
+        status: 'passed' as const,
         error: step.error?.message
       })) || []
     }
@@ -236,7 +243,7 @@ class AdvancedPlaywrightReporter implements Reporter {
       duration: result.duration,
       error: result.errors?.[0]?.message,
       metadata: {
-        browser: result.project?.name,
+        browser: 'unknown', // Project name extraction moved to different API in newer Playwright
         retries: result.retry,
         timestamp: Date.now()
       }

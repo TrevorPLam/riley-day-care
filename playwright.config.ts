@@ -9,6 +9,7 @@ const config = configManager.getConfig()
 const crossBrowserProfiles = getBrowserSet('cross-browser')
 const mobileChrome = getBrowserProfile('mobile-chrome')
 const mobileSafari = getBrowserProfile('mobile-safari')
+const testRunId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
 
 export default defineConfig({
   testDir: './testing-infrastructure/e2e/features',
@@ -25,6 +26,9 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
     actionTimeout: config.environment.timeout,
     navigationTimeout: config.environment.timeout,
+    extraHTTPHeaders: {
+      'x-playwright-test-run': testRunId,
+    },
   },
   projects: [
     ...crossBrowserProfiles.map((browserProfile) => ({
@@ -74,7 +78,6 @@ export default defineConfig({
       use: { 
         ...devices['Desktop Chrome'],
         viewport: { width: 1280, height: 720 },
-        reducedMotion: 'reduce',
       },
       testMatch: '**/*.accessibility.spec.ts',
       grep: new RegExp(/@accessibility|accessibility/i),

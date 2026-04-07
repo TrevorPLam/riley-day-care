@@ -368,7 +368,7 @@ class AdvancedCacheManager {
       try {
         const stats = await fs.stat(testFile)
         const dependencies = await this.findDependencies(testFile)
-        const hash = this.calculateFileHash(testFile)
+        const hash = await this.calculateFileHash(testFile)
         
         await this.cacheDependencies(testFile, dependencies, hash)
       } catch (error) {
@@ -485,7 +485,7 @@ class AdvancedCacheManager {
    */
   exportCacheData(): {
     entries: Array<{ key: string; size: number; age: number; type: string }>
-    stats: ReturnType<typeof this.getStats>
+    stats: ReturnType<AdvancedCacheManager['getStats']>
   } {
     const entries = Array.from(this.cache.entries()).map(([key, entry]) => ({
       key,
