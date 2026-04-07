@@ -120,7 +120,7 @@ test.describe('Navigation Flow - Enterprise Grade', () => {
       await navigationPage.page.goto(pagePath)
       
       // Find and click enrollment CTA
-      const enrollmentCTA = navigationPage.page.getByRole('link', { name: /enroll now/i })
+      const enrollmentCTA = navigationPage.page.getByRole('link', { name: /enrollment/i })
       await expect(enrollmentCTA).toBeVisible()
       await enrollmentCTA.click()
       
