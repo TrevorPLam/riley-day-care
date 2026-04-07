@@ -222,13 +222,10 @@ describe('Enrollment Validation Schema', () => {
   describe('TypeScript Type Inference', () => {
     test('should correctly infer TypeScript type', () => {
       const validData = createMockEnrollmentData()
-      const result = enrollmentSchema.safeParse(validData)
-      
-      if (result.success) {
-        const typedData: EnrollmentData = result.data
-        expect(typedData.parentName).toBe(validData.parentName)
-        expect(typedData.childName).toBe(validData.childName)
-        expect(typedData.email).toBe(validData.email)
+      const typedData: EnrollmentData = expectValidationToPass(enrollmentSchema, validData)
+      expect(typedData.parentName).toBe(validData.parentName)
+      expect(typedData.childName).toBe(validData.childName)
+      expect(typedData.email).toBe(validData.email)
       }
     })
   })
