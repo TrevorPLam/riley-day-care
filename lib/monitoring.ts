@@ -74,6 +74,13 @@ class CacheMetricsStore {
         break;
     }
 
+        const previousTotal = this.metrics.totalOperations - 1;
+        const previousErrorCount = (this.metrics.errorRate / 100) * previousTotal;
+        const isError = operation.statusCode !== undefined && operation.statusCode >= 400 ? 1 : 0;
+        this.metrics.errorRate =
+          this.metrics.totalOperations > 0
+            ? ((previousErrorCount + isError) / this.metrics.totalOperations) * 100
+            : 0;
     if (operation.duration) {
       this.metrics.averageResponseTime = 
         (this.metrics.averageResponseTime * (this.metrics.totalOperations - 1) + operation.duration) / 
