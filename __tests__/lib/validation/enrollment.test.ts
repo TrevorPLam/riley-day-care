@@ -260,12 +260,10 @@ describe('Enrollment Validation Schema', () => {
         childName: '',
         email: 'invalid'
       }
-      const result = enrollmentSchema.safeParse(invalidData)
-      
-      if (!result.success) {
-        const formattedError = formatZodErrors(result.error)
-        // Should return one of the field errors, not all of them
-        expect(formattedError).toMatch(/(Parent\/guardian name is required|Child's name is required|Please enter a valid email address)/)
+      const validationError = expectValidationToFail(enrollmentSchema, invalidData)
+      const formattedError = formatZodErrors(validationError)
+      // Should return one of the field errors, not all of them
+      expect(formattedError).toMatch(/(Parent\/guardian name is required|Child's name is required|Please enter a valid email address)/)
       }
     })
   })
