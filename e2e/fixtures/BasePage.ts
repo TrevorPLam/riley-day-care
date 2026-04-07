@@ -72,6 +72,9 @@ export class EnrollmentPage extends BasePage {
     await expect(this.successMessage).toBeVisible({ timeout: 10000 });
   }
 
+    async verifySubmissionSuccess() {
+      await this.waitForSuccessMessage();
+    }
   async waitForErrorMessage() {
     await expect(this.errorMessage).toBeVisible({ timeout: 10000 });
   }
