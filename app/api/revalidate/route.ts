@@ -9,7 +9,11 @@ import { revalidateTag, revalidatePath } from "next/cache";
 import { cacheInvalidation, cacheMonitoring, CACHE_TAGS } from "@/lib/cache";
 
 // Simple API key for security (in production, use proper auth)
-const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET || "dev-secret";
+const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET;
+
+if (!REVALIDATION_SECRET) {
+  throw new Error("REVALIDATION_SECRET must be set");
+}
 
 export async function POST(request: NextRequest) {
   try {
