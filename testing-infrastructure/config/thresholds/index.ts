@@ -262,7 +262,12 @@ export function validateReliability(
   if (actual.flakiness > expected.flakiness) {
     failures.push(`Flakiness ${actual.flakiness}% above threshold ${expected.flakiness}%`)
   }
-
+  if (actual.maxRetries > expected.maxRetries) {
+    failures.push(`Max retries ${actual.maxRetries} above threshold ${expected.maxRetries}`)
+  }
+  if (actual.timeout > expected.timeout) {
+    failures.push(`Timeout ${actual.timeout}ms above threshold ${expected.timeout}ms`)
+  }
   return {
     passed: failures.length === 0,
     failures
