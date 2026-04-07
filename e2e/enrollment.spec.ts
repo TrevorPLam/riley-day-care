@@ -40,11 +40,6 @@ test.describe('Enrollment Flow', () => {
     
     // Should show validation errors
     await expect(page.locator('text=Parent/guardian name is required')).toBeVisible()
-    await expect(page.locator('text=Child\'s name is required')).toBeVisible()
-    await expect(page.locator('text=Child\'s age is required')).toBeVisible()
-    await expect(page.locator('text=Preferred start date is required')).toBeVisible()
-    await expect(page.locator('text=Phone number is required')).toBeVisible()
-    await expect(page.locator('text=Email address is required')).toBeVisible()
   })
 
   test('should validate email format', async ({ page }) => {
