@@ -8,12 +8,15 @@ import Link from "next/link";
 
 // React 19: Enhanced error categorization
 function getErrorCategory(error: Error): 'network' | 'rendering' | 'validation' | 'unknown' {
-  if (error.message.includes('fetch') || error.message.includes('network')) {
+  const message = error.message.toLowerCase();
+
+  if (message.includes('fetch') || message.includes('network')) {
     return 'network';
   }
-  if (error.message.includes('render') || error.name === 'TypeError') {
+  if (message.includes('render') || error.name === 'TypeError') {
     return 'rendering';
   }
+  if (message.includes('validation') || message.includes('required')) {
   if (error.message.includes('validation') || error.message.includes('required')) {
     return 'validation';
   }
