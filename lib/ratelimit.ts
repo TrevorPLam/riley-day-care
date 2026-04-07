@@ -23,7 +23,12 @@ export function getClientIdentifier(request: Request): string {
   const host = request.headers.get("host") || "";
   const testRunId = request.headers.get("x-playwright-test-run");
 
-  if (/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host) && testRunId) {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host) &&
+    testRunId &&
+    /^[a-zA-Z0-9-]{1,64}$/.test(testRunId)
+  ) {
     return `playwright:${testRunId}`;
   }
 
