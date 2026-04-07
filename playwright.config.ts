@@ -17,7 +17,7 @@ export default defineConfig({
   retries: config.environment.retries,
   workers: process.env.CI ? 1 : Math.max(1, config.environment.parallel),
   use: {
-    baseURL: config.environment.baseUrl,
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
     headless: config.environment.headless,
     trace: config.environment.trace as 'on' | 'off' | 'retain-on-failure' | 'on-first-retry',
     screenshot: config.environment.screenshot as 'off' | 'only-on-failure',
