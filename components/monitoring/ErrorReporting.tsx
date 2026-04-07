@@ -231,7 +231,14 @@ export const errorReportingUtils = {
       type: 'form_error',
       formName,
       step,
-      formData: JSON.stringify(formData),
+      formData: JSON.stringify(
+        Object.fromEntries(
+          Object.entries(formData).map(([key, val]) => [
+            key,
+            /password|passcode|token|secret|ssn|email|phone/i.test(key) ? '[REDACTED]' : val,
+          ])
+        )
+      ),
       timestamp: new Date().toISOString(),
     });
   },
