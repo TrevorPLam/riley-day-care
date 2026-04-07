@@ -41,7 +41,8 @@ test.describe('Enrollment Flow - Enterprise Grade', () => {
     
     await enrollmentPage.fillEnrollmentForm(invalidData)
     await enrollmentPage.submitForm()
-    await enrollmentPage.verifyValidationError('valid email')
+    await enrollmentPage.waitForErrorMessage()
+    await expect(enrollmentPage.errorMessage).toContainText(/valid email/i)
   })
 
   test('should validate phone number format and length', async ({ enrollmentPage, testDataFactory }) => {
