@@ -159,7 +159,10 @@ export function cachedFetch<T>(key: string, fetcher: () => Promise<T>): Promise<
     return cache.get(key);
   }
   
-  const promise = fetcher();
+  const promise = fetcher().catch((error) => {
+    cache.delete(key);
+    throw error;
+  });
   cache.set(key, promise);
   return promise;
 }
