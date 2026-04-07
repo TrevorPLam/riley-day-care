@@ -78,7 +78,10 @@ export class EnrollmentPage extends BasePage {
   async waitForErrorMessage() {
     await expect(this.errorMessage).toBeVisible({ timeout: 10000 });
   }
-}
+
+    async verifyValidationError(expectedError: string) {
+      await expect(this.page.getByText(expectedError)).toBeVisible();
+    }
 
 export class NavigationPage extends BasePage {
   get homeLink() { return this.page.locator('a[href="/"]'); }
