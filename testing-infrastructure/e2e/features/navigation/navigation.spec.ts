@@ -150,7 +150,7 @@ test.describe('Site Navigation', () => {
     await expect(page.getByText('1509 Haymarket Rd', { exact: true })).toBeVisible()
     await expect(page.getByText('Dallas, TX 75253', { exact: true })).toBeVisible()
 
-    const phoneLink = page.getByRole('link', { name: /\(972\) 286-0357/i }).first()
+    const phoneLink = page.locator('main').getByRole('link', { name: /^\(972\) 286-0357$/ })
     await expect(phoneLink).toBeVisible()
     await expect(phoneLink).toHaveAttribute('href', 'tel:19722860357')
   })
