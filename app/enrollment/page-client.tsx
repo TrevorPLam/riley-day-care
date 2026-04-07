@@ -84,7 +84,24 @@ export default function EnrollmentPageClient() {
                 | null;
 
               if (!response.ok || !json?.ok) {
-                const messageText =
+                if (response.status === 403) {
+                  try {
+                    const csrfResponse = await fetch("/api/csrf", { cache: "no-store" });
+                    if (csrfResponse.ok) {
+                      const csrfData = (await csrfResponse.json()) as { csrfToken?: string };
+                      if (csrfData.csrfToken) {
+                        setCsrfToken(csrfData.csrfToken);
+                      }
+                    }
+                  } catch {
+                    // Keep existing token if refresh fails.
+                  }
+
+                  setError("Your security token expired. Please submit again.");
+                  setStatus("idle");
+                  return;
+                }
+
                   json?.error ||
                   "We could not submit your request. Please check your details and try again.";
                 setError(messageText);
