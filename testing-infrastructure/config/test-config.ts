@@ -385,17 +385,20 @@ export const configManager = new ConfigurationManager()
 
 // Environment detection
 export function detectEnvironment(): string {
-  const env = process.env.NODE_ENV || process.env.TEST_ENV || 'development'
-  
   // CI environment detection
   if (process.env.CI) {
     return 'staging'
   }
-  
-  // Production environment detection
+
+  const env = process.env.TEST_ENV || process.env.NODE_ENV || 'development'
+
   if (env === 'production') {
     return 'production'
   }
+  if (env === 'staging') {
+    return 'staging'
+  }
+
   
   return 'development'
 }
