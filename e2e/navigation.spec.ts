@@ -35,22 +35,22 @@ test.describe('Site Navigation', () => {
   test('should handle direct URL navigation', async ({ page }) => {
     // Test direct navigation to each page
     await page.goto('/about')
-    await expect(page.locator('h1')).toContainText('About Riley Day Care')
-    
+    await expect(page.getByRole('heading', { name: /a calm, caring place for young children/i })).toBeVisible()
+
     await page.goto('/programs')
-    await expect(page.locator('h1')).toContainText('Our Programs')
-    
+    await expect(page.getByRole('heading', { name: /age-appropriate care for every stage/i })).toBeVisible()
+
     await page.goto('/tuition')
-    await expect(page.locator('h1')).toContainText('Tuition Information')
-    
+    await expect(page.getByRole('heading', { name: /clear expectations for your family/i })).toBeVisible()
+
     await page.goto('/contact')
-    await expect(page.locator('h1')).toContainText('Contact Us')
-    
+    await expect(page.getByRole('heading', { name: /answer your questions/i })).toBeVisible()
+
     await page.goto('/enrollment')
-    await expect(page.locator('h1')).toContainText('Enroll Your Child')
-    
+    await expect(page.getByRole('heading', { name: /schedule a tour and check availability/i })).toBeVisible()
+
     await page.goto('/privacy')
-    await expect(page.locator('h1')).toContainText('Privacy Policy')
+    await expect(page.getByRole('heading', { name: /how we handle your information/i })).toBeVisible()
   })
 
   test('should show 404 page for invalid routes', async ({ page }) => {
