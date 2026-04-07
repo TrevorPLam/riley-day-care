@@ -39,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="bg-white text-slate-900">
-        <PlausibleProvider src="https://plausible.io/js/script.js">
+        <PlausibleProvider src={`${process.env.PLAUSIBLE_API_HOST ?? "https://plausible.io"}/js/script.js`}>
         <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/90 backdrop-blur">
           <Container className="flex h-16 items-center justify-between gap-4">
             <div className="flex items-center gap-6">
