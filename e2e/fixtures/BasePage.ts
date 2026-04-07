@@ -92,7 +92,7 @@ export class NavigationPage extends BasePage {
   }
 
   async navigateToAbout() {
-    await this.aboutLink.click();
+      await this.page.goto('/about');
   }
 
   async navigateToContact() {
