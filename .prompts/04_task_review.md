@@ -10,7 +10,7 @@ maintainability concerns.
 
 Next, switch into reviewer mode and critically assess your work against:
 - definition of done
-- correctness and complSeteness
+- correctness and completeness
 - codebase and architecture alignment
 - current best practices from research
 - security, performance, and maintainability
