@@ -137,17 +137,17 @@ test.describe('Site Navigation', () => {
   test('should handle enrollment CTA from different pages', async ({ page }) => {
     // Test CTA from home page
     await page.goto('/')
-    await page.click('text=Enroll Now')
-    await expect(page).toHaveURL('/enrollment')
-    
+    await page.click('text=Schedule a Tour')
+    await expect(page).toHaveURL(/\/enrollment(#enrollment)?$/)
+
     // Test CTA from about page
     await page.goto('/about')
-    await page.click('text=Enroll Now')
-    await expect(page).toHaveURL('/enrollment')
-    
+    await page.click('text=Schedule a Tour')
+    await expect(page).toHaveURL(/\/enrollment(#enrollment)?$/)
+
     // Test CTA from programs page
     await page.goto('/programs')
-    await page.click('text=Enroll Now')
-    await expect(page).toHaveURL('/enrollment')
+    await page.click('text=Schedule a Tour')
+    await expect(page).toHaveURL(/\/enrollment(#enrollment)?$/)
   })
 })
