@@ -3,10 +3,13 @@ import { sendEnrollmentEmail } from "@/lib/email";
 import { enrollmentSchema, formatZodErrors, type EnrollmentData } from "@/lib/validation";
 import { validateCsrfToken } from "@/lib/csrf";
 import { checkRateLimit, createRateLimitHeaders } from "@/lib/ratelimit";
+import { cacheHeaders, cacheInvalidation, cacheMonitoring } from "@/lib/cache";
 
 type EnrollmentBody = EnrollmentData;
 
 export async function POST(request: Request) {
+  cacheMonitoring.logCacheOperation("enrollment-api-request", "enrollment-api");
+  
   // Check rate limiting first (before any other processing)
   const rateLimitResult = await checkRateLimit(request);
   
@@ -14,6 +17,7 @@ export async function POST(request: Request) {
     const headers = {
       "Retry-After": String(rateLimitResult.retryAfter),
       ...createRateLimitHeaders(rateLimitResult),
+      ...cacheHeaders.forDynamic(), // No cache for rate-limited responses
     };
     
     return NextResponse.json(
@@ -34,17 +38,23 @@ export async function POST(request: Request) {
       { ok: false, error: "Invalid request body" },
       { 
         status: 400,
-        headers: createRateLimitHeaders(rateLimitResult)
+        headers: {
+          ...createRateLimitHeaders(rateLimitResult),
+          ...cacheHeaders.forDynamic(), // No cache for error responses
+        }
       }
     );
   }
 
-  const honeypot = typeof data.extraInfo === "string" ? data.extraInfo.trim() : "";
+  const honeypot = typeof data.extraInfo === "string" && data.extraInfo.length > 0 ? data.extraInfo : "";
   if (honeypot) {
     return NextResponse.json(
       { ok: true },
       {
-        headers: createRateLimitHeaders(rateLimitResult)
+        headers: {
+          ...createRateLimitHeaders(rateLimitResult),
+          ...cacheHeaders.forDynamic(), // No cache for honeypot responses
+        }
       }
     );
   }
@@ -55,7 +65,10 @@ export async function POST(request: Request) {
       { ok: false, error: "Invalid or missing security token" },
       { 
         status: 403,
-        headers: createRateLimitHeaders(rateLimitResult)
+        headers: {
+          ...createRateLimitHeaders(rateLimitResult),
+          ...cacheHeaders.forDynamic(), // No cache for security errors
+        }
       }
     );
   }
@@ -73,7 +86,10 @@ export async function POST(request: Request) {
       { ok: false, error: errorMessage },
       { 
         status: 400,
-        headers: createRateLimitHeaders(rateLimitResult)
+        headers: {
+          ...createRateLimitHeaders(rateLimitResult),
+          ...cacheHeaders.forDynamic(), // No cache for validation errors
+        }
       }
     );
   }
@@ -105,10 +121,21 @@ export async function POST(request: Request) {
       userAgent
     });
 
+    // Invalidate enrollment-related caches after successful submission
+    try {
+      cacheInvalidation.invalidateEnrollment();
+      cacheMonitoring.logCacheOperation("enrollment-success-cache-invalidation", "enrollment-api");
+    } catch (cacheError) {
+      console.error("Enrollment cache invalidation failed", cacheError);
+    }
+
     return NextResponse.json(
       { ok: true },
       { 
-        headers: createRateLimitHeaders(rateLimitResult)
+        headers: {
+          ...createRateLimitHeaders(rateLimitResult),
+          ...cacheHeaders.forDynamic(), // No cache for success responses
+        }
       }
     );
   } catch (err) {
@@ -117,7 +144,10 @@ export async function POST(request: Request) {
       { ok: false, error: "We could not process your request. Please try again later." },
       { 
         status: 500,
-        headers: createRateLimitHeaders(rateLimitResult)
+        headers: {
+          ...createRateLimitHeaders(rateLimitResult),
+          ...cacheHeaders.forDynamic(), // No cache for error responses
+        }
       }
     );
   }

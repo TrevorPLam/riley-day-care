@@ -29,8 +29,6 @@ export default function ErrorBoundary({
         </p>
         <div className="flex gap-4 justify-center">
           <Button onClick={reset} variant="primary">
-        <div className="flex gap-4 justify-center">
-          <Button onClick={unstable_retry} variant="primary">
             Try again
           </Button>
           <Link href="/" className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-light">

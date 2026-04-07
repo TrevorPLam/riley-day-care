@@ -67,11 +67,19 @@ export async function sendEnrollmentEmail(payload: EnrollmentEmailPayload): Prom
     `User agent: ${payload.userAgent || "unknown"}`
   ];
 
-  await transporter.sendMail({
-    from,
-    to: ENROLLMENT_NOTIFICATIONS_TO,
-    subject: "New enrollment inquiry - Riley Day Care",
-    text: lines.join("\n")
-  });
+  try {
+    await transporter.sendMail({
+      from,
+      to: ENROLLMENT_NOTIFICATIONS_TO,
+      subject: "New enrollment inquiry - Riley Day Care",
+      text: lines.join("\n")
+    });
+
+    console.log("[email] Enrollment notification sent successfully");
+    return true;
+  } catch (error) {
+    console.error("[email] Failed to send enrollment notification:", error);
+    throw error;
+  }
 }
 
