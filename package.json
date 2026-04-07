@@ -35,7 +35,7 @@
     "test:optimize-cache": "tsx --eval \"import { cacheManager } from './testing-infrastructure/utils/cache-manager.ts'; await cacheManager.optimize(); console.log('Cache optimized');\"",
     "test:parallel-stats": "tsx --eval \"import { parallelOptimizer } from './testing-infrastructure/utils/parallel-execution.ts'; console.log(JSON.stringify(parallelOptimizer.getExecutionStats(), null, 2));\"",
     "test:healing-stats": "node -e \"console.log(JSON.stringify({ message: 'Self-healing stats are not persisted by default in this repository yet.' }, null, 2));\"",
-    "test:clean": "node -e \"const fs = require('fs'); ['testing-infrastructure/artifacts', 'playwright-report', 'test-results', 'visual-tests'].forEach((target) => fs.rmSync(target, { recursive: true, force: true })); console.log('Removed generated test artifacts');\" && npm run test:optimize-cache",
+    "test:clean": "node -e \"const fs = require('fs'); ['testing-infrastructure/artifacts'].forEach((target) => fs.rmSync(target, { recursive: true, force: true })); console.log('Removed generated test artifacts');\" && npm run test:optimize-cache",
     "test:report": "npm run test:coverage && npm run test:e2e:cross-browser && node -e \"console.log('Reports are written to testing-infrastructure/artifacts');\"",
     "playwright:install": "playwright install --with-deps",
     "playwright:install-browsers": "playwright install chromium firefox webkit",
