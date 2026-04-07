@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
 // React 19: Enhanced error categorization for global errors
@@ -29,6 +30,9 @@ export default function GlobalError({
   const errorCategory = getGlobalErrorCategory(error);
 
   useEffect(() => {
+    // Capture error in Sentry
+    Sentry.captureException(error);
+    
     // React 19: Enhanced global error logging with context
     console.error("Global error boundary caught:", {
       error,
