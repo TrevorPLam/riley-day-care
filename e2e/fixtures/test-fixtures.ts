@@ -78,7 +78,7 @@ export const customExpect = {
     
     for (let i = 0; i < linkCount; i++) {
       const link = links.nth(i)
-      await expect(link).toHaveAttribute('href')
+      await expect(link).toHaveAttribute('href', /.+/)
       await expect(link).not.toBeEmpty()
     }
   },
