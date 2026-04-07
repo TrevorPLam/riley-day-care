@@ -39,6 +39,16 @@ export async function POST(request: Request) {
     );
   }
 
+  const honeypot = typeof data.extraInfo === "string" ? data.extraInfo.trim() : "";
+  if (honeypot) {
+    return NextResponse.json(
+      { ok: true },
+      {
+        headers: createRateLimitHeaders(rateLimitResult)
+      }
+    );
+  }
+
   const csrfToken = data.csrfToken as string;
   if (!(await validateCsrfToken(csrfToken))) {
     return NextResponse.json(
@@ -49,9 +59,10 @@ export async function POST(request: Request) {
       }
     );
   }
-  
+
   // Remove CSRF token from data before validation
   delete data.csrfToken;
+  delete data.extraInfo;
   
   // Validate with Zod schema
   const result = enrollmentSchema.safeParse(data);
