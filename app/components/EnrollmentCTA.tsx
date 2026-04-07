@@ -6,7 +6,11 @@ import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 export function EnrollmentCTA() {
   const scrollToEnrollment = () => {
     const el = document.getElementById("enrollment");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    window.location.assign("/enrollment#enrollment");
   };
 
   return (
