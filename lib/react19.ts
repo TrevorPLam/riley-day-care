@@ -133,12 +133,14 @@ export function createFormAction<T>(
   return async (prevState: FormState<T>, formData: FormData): Promise<FormState<T>> => {
     try {
       const data = Object.fromEntries(formData.entries()) as T;
-      
+      await submitFn(data);
+
       return {
         ...prevState,
         data,
-        isSubmitting: true,
+        isSubmitting: false,
         error: null,
+        success: true,
       };
     } catch (error) {
       return {
