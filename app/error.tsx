@@ -8,10 +8,10 @@ import Link from "next/link";
 
 export default function ErrorBoundary({
   error,
-  unstable_retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  reset: () => void;
 }) {
   useEffect(() => {
     // Log error - replace with Sentry in future
@@ -27,6 +27,8 @@ export default function ErrorBoundary({
         <p className="text-sm leading-relaxed text-slate-600 max-w-md mx-auto">
           We apologize for the inconvenience. Our team has been notified and we&apos;re working to fix the issue.
         </p>
+        <div className="flex gap-4 justify-center">
+          <Button onClick={reset} variant="primary">
         <div className="flex gap-4 justify-center">
           <Button onClick={unstable_retry} variant="primary">
             Try again
