@@ -26,8 +26,8 @@ test.describe('Enrollment Flow', () => {
     await page.click('button[type="submit"]')
     
     // Verify success message
-    await expect(page.locator('text=Thank you for your inquiry')).toBeVisible()
-    await expect(page.locator('text=We will contact you within 24 hours')).toBeVisible()
+    await expect(page.getByText(/Thank you .*request has been received/i)).toBeVisible()
+    await expect(page.getByText(/we'll follow up soon/i)).toBeVisible()
   })
 
   test('should validate form fields and show error messages', async ({ page }) => {
