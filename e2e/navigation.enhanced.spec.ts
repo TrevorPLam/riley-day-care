@@ -110,7 +110,7 @@ test.describe('Navigation Flow - Enterprise Grade', () => {
     
     // Test phone number link
     const phoneLink = navigationPage.page.getByRole('link', { name: /\(972\) 286-0357/i })
-    await expect(phoneLink).toHaveAttribute('href', 'tel:(972) 286-0357')
+    await expect(phoneLink).toHaveAttribute('href', 'tel:19722860357')
   })
 
   test('should handle enrollment CTA from different pages', async ({ navigationPage }) => {
