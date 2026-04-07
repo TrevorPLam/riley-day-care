@@ -9,8 +9,15 @@ import * as Sentry from '@sentry/nextjs';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    
+    const body = await request.json().catch(() => null);
+
+        if (!body || typeof body !== 'object') {
+          return NextResponse.json(
+            { error: 'Invalid JSON body provided' },
+            { status: 400 }
+          );
+        }
+
     const { error, context, category, severity } = body;
     
     if (!error || !error.message) {
@@ -42,12 +49,6 @@ export async function POST(request: NextRequest) {
         userAgent: request.headers.get('user-agent'),
         ip: request.headers.get('x-forwarded-for') || 'unknown',
       },
-    });
-
-    // Track error reporting metrics
-    Sentry.metrics.increment('errors.manual_reports', 1, {
-      category: category || 'manual_report',
-      severity: severity || 'medium',
     });
 
     // Add breadcrumb for manual error reporting
@@ -124,10 +125,8 @@ export async function GET(request: NextRequest) {
       },
     };
 
-    // Track API metrics
-    Sentry.metrics.timing('api.error_monitoring.duration', 0, {
-      endpoint: '/api/monitoring/errors',
-    });
+    // Track API metrics (removed due to TypeScript compatibility issues)
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     return NextResponse.json({
       timestamp: new Date().toISOString(),
@@ -164,10 +163,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Error data cleared via API',
       category: 'error_management',
       level: 'info',
-    });
-
-    Sentry.metrics.increment('errors.data_cleared', 1, {
-      endpoint: '/api/monitoring/errors',
     });
 
     return NextResponse.json({

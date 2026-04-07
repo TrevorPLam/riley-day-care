@@ -1,5 +1,7 @@
+import { env } from "../env";
+
 export function getLocalBusinessJsonLd() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+  const baseUrl = env.NEXT_PUBLIC_SITE_URL;
 
   return {
     "@context": "https://schema.org",

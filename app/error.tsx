@@ -17,7 +17,6 @@ function getErrorCategory(error: Error): 'network' | 'rendering' | 'validation' 
     return 'rendering';
   }
   if (message.includes('validation') || message.includes('required')) {
-  if (error.message.includes('validation') || error.message.includes('required')) {
     return 'validation';
   }
   return 'unknown';

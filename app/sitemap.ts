@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
+import { env, getBaseUrl } from "@/lib/env";
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+const baseUrl = getBaseUrl();
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = ["", "/about", "/programs", "/tuition", "/enrollment", "/faq", "/contact", "/privacy"];

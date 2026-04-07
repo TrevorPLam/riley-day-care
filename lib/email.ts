@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { env } from "./env";
 
 const {
   EMAIL_HOST: SMTP_HOST,
@@ -7,7 +8,7 @@ const {
   EMAIL_PASS: SMTP_PASSWORD,
   ENROLLMENT_NOTIFICATIONS_TO,
   ENROLLMENT_NOTIFICATIONS_FROM
-} = process.env;
+} = env;
 
 if (!ENROLLMENT_NOTIFICATIONS_TO) {
   console.warn(

@@ -32,14 +32,10 @@ export async function GET(request: NextRequest) {
       operations: recentOperations,
       webVitals,
       errors: errorMetrics,
-      system: getSystemMetrics(),
     };
 
-    // Track API performance
-    const startTime = Date.now();
-    Sentry.metrics.timing('api.performance_monitoring.duration', Date.now() - startTime, {
-      endpoint: '/api/monitoring/performance',
-    });
+    // Track API performance (removed due to TypeScript compatibility issues)
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     return NextResponse.json(response);
   } catch (error) {

@@ -1,0 +1,24 @@
+# Don't format these folders
+node_modules
+.next
+build
+dist
+coverage
+testing-infrastructure/artifacts
+
+# Don't format these files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.env
+.env.local
+.env.*.local
+
+# Don't format generated files
+*.min.js
+*.min.css
+*.generated.*
+
+# Don't format logs
+*.log
+logs

@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
+import Link from "next/link";
 
 // React 19: Enhanced error categorization for global errors
 function getGlobalErrorCategory(error: Error): 'critical' | 'hydration' | 'build' | 'unknown' {
@@ -14,7 +15,6 @@ function getGlobalErrorCategory(error: Error): 'critical' | 'hydration' | 'build
     return 'build';
   }
   if (error.name === 'TypeError' || message.includes('critical')) {
-  if (error.name === 'TypeError' || error.message.includes('critical')) {
     return 'critical';
   }
   return 'unknown';
@@ -78,12 +78,12 @@ export default function GlobalError({
             >
               Reload application
             </button>
-            <a 
+            <Link 
               href="/"
               className="inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition text-brand hover:text-brand-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
             >
               Go back home
-            </a>
+            </Link>
           </div>
           {/* React 19: Enhanced global error information in development */}
           {process.env.NODE_ENV === "development" && (

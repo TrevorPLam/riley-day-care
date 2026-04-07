@@ -6,10 +6,10 @@ import { Container } from "@/components/layout/Container";
 import { getLocalBusinessJsonLd } from "@/lib/seo/structuredData";
 import PlausibleProvider from "next-plausible";
 import { WebVitalsReporter } from "@/components/monitoring/WebVitalsReporter";
+import { env } from "@/lib/env";
+import { reportWebVitals } from "@/lib/performance";
 
-const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-const siteUrl =
-  rawSiteUrl && URL.canParse(rawSiteUrl) ? rawSiteUrl : "https://example.com";
+const siteUrl = env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -40,7 +40,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="bg-white text-slate-900">
-        <WebVitalsReporter />
+        {/* WebVitalsReporter should be mounted from a client-safe monitoring module, not root layout */}
         <PlausibleProvider src={`${process.env.PLAUSIBLE_API_HOST ?? "https://plausible.io"}/js/script.js`}>
         <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/90 backdrop-blur">
           <Container className="flex h-16 items-center justify-between gap-4">
@@ -104,4 +104,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
+
+// Export reportWebVitals for Next.js Web Vitals integration
+export { reportWebVitals as webVitals };
 

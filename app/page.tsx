@@ -7,7 +7,7 @@ import { PhoneLink } from "@/app/components/PhoneLink";
 import { CACHE_DURATIONS } from "@/lib/cache";
 
 // ISR: Revalidate homepage every 30 minutes for fresh content while maintaining performance
-export const revalidate = CACHE_DURATIONS.HOMEPAGE; // 30 minutes
+export const revalidate = 1800; // 30 minutes
 
 export const metadata: Metadata = {
   title: "Riley Day Care | Safe, Nurturing Child Care in Southeast Dallas, TX",
