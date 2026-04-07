@@ -43,7 +43,7 @@ function trackWebVital(metric: {
 
   if (metric.rating === 'poor' || metric.rating === 'needs-improvement') {
     Sentry.captureMessage(
-      `Performance Issue: ${metric.name} is ${metric.rating} (${metric.value})`,
+      `Performance Issue: ${metric.name} is ${metric.rating}`,
       'warning'
     );
   }
