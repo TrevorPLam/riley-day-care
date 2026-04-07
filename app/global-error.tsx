@@ -4,10 +4,10 @@ import { useEffect } from "react";
 
 export default function GlobalError({
   error,
-  unstable_retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  reset: () => void;
 }) {
   useEffect(() => {
     // Log global error - replace with Sentry in future
@@ -26,7 +26,7 @@ export default function GlobalError({
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={unstable_retry}
+              onClick={reset}
               className="inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition bg-brand text-white hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
             >
               Reload application
