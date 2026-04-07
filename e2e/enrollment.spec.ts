@@ -11,7 +11,7 @@ test.describe('Enrollment Flow', () => {
     await expect(page).toHaveURL('/enrollment')
     
     // Verify page loads correctly
-    await expect(page.locator('h1')).toContainText('Enroll Your Child')
+    await expect(page.getByRole('heading', { name: 'Schedule a tour and check availability.' })).toBeVisible()
     
     // Fill out the enrollment form
     await page.fill('input[name="parentName"]', 'John Doe')
