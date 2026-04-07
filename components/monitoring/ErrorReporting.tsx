@@ -170,7 +170,15 @@ export function useAPIErrorReporting() {
     return errorMonitoring.reportError(error, {
       type: 'validation_error',
       field,
-      value: typeof value === 'string' ? value : JSON.stringify(value),
+      value: typeof value === 'string'
+        ? value
+        : (() => {
+            try {
+              return JSON.stringify(value);
+            } catch {
+              return String(value);
+            }
+          })(),
       ...additionalContext,
     });
   };
