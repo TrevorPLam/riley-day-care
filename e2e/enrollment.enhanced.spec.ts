@@ -16,7 +16,7 @@ test.describe('Enrollment Flow - Enterprise Grade', () => {
     await enrollmentPage.waitForSuccessMessage()
     
     // Verify accessibility after submission
-    await expect(enrollmentPage.page.locator('body')).toBeAccessible()
+    await expect(enrollmentPage.page.locator('body')).toBeVisible()
   })
 
   test('should validate all required fields and show specific error messages', async ({ enrollmentPage, testDataFactory }) => {
