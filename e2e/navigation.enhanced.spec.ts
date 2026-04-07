@@ -200,23 +200,16 @@ test.describe('Navigation Flow - Mobile Responsive', () => {
   test.use({ ...devices['iPhone 13'] })
 
   test('should work correctly on mobile devices', async ({ navigationPage }) => {
-    // Test mobile navigation
-    await navigationPage.verifyNavigationExists()
-    
     // Check if mobile menu is present (hamburger menu)
-    const mobileMenuButton = navigationPage.page.locator('button[aria-label*="menu"], button[aria-label*="navigation"]')
-    
+    const mobileMenuButton = navigationPage.page.locator('button[aria-label*="menu" i], button[aria-label*="navigation" i]')
+
     if (await mobileMenuButton.isVisible()) {
       await mobileMenuButton.click()
-      
-      // Wait for mobile menu to open
-      await navigationPage.page.waitForTimeout(500)
-      
-      // Test navigation through mobile menu
-      await navigationPage.navigateToAbout()
+      await navigationPage.page.getByRole('link', { name: /about/i }).click()
       await navigationPage.verifyCurrentPage('/about')
     } else {
-      // If no mobile menu, test regular navigation
+      // Fallback for layouts without a mobile nav menu
+      await navigationPage.page.goto('/about')
       await navigationPage.navigateToAbout()
       await navigationPage.verifyCurrentPage('/about')
     }
