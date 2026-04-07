@@ -395,7 +395,9 @@ const cacheDebugging = {
       health: analysis.hitRate > 70 ? "healthy" : analysis.hitRate > 50 ? "warning" : "critical",
       metrics,
       analysis,
-      configuration: { isValid: true },
+      configuration: {
+        isValid: !!process.env.NODE_ENV && process.env.NODE_ENV !== 'development',
+      },
       recommendations: analysis.recommendations,
     };
   },
