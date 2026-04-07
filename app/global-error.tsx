@@ -4,12 +4,15 @@ import { useEffect } from "react";
 
 // React 19: Enhanced error categorization for global errors
 function getGlobalErrorCategory(error: Error): 'critical' | 'hydration' | 'build' | 'unknown' {
-  if (error.message.includes('hydration') || error.message.includes('SSR')) {
+  const message = error.message.toLowerCase();
+
+  if (message.includes('hydration') || message.includes('ssr')) {
     return 'hydration';
   }
-  if (error.message.includes('build') || error.message.includes('module')) {
+  if (message.includes('build') || message.includes('module')) {
     return 'build';
   }
+  if (error.name === 'TypeError' || message.includes('critical')) {
   if (error.name === 'TypeError' || error.message.includes('critical')) {
     return 'critical';
   }
