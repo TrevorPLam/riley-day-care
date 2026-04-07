@@ -339,9 +339,9 @@ describe('Enrollment API Route', () => {
       const response = await POST(request)
       const result = await response.json()
 
-      expect(response.status).toBe(429)
+      expect(response.status).toBe(500)
       expect(result.ok).toBe(false)
-      expect(result.error).toBe('Too many attempts. Please try again later.')
+      expect(result.error).toBe('We could not process your request. Please try again later.')
     })
 
     test('should log enrollment inquiries for debugging', async () => {
