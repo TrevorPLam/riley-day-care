@@ -10,7 +10,7 @@ test.describe('Navigation Flow - Enterprise Grade', () => {
     // Test navigation to About page
     await navigationPage.navigateToAbout()
     await navigationPage.verifyCurrentPage('/about')
-    await expect(navigationPage.page.getByRole('heading', { name: /about/i })).toBeVisible()
+    await expect(navigationPage.page.getByRole('heading', { name: /a calm, caring place for young children/i })).toBeVisible()
     
     // Test navigation to Programs page
     await navigationPage.navigateToPrograms()
