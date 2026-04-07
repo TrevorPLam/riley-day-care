@@ -61,6 +61,12 @@ riley-day-care/
 ├── components/           # Shared components
 │   ├── layout/          # Layout components
 │   └── shared/          # Reusable UI components
+├── testing-infrastructure/
+│   ├── unit/            # Canonical Vitest test tree
+│   ├── e2e/             # Canonical Playwright test tree
+│   ├── artifacts/       # Generated coverage, reports, screenshots, and traces
+│   ├── config/          # Shared browser, environment, and threshold config
+│   └── utils/           # Custom reporters and supporting test utilities
 ├── lib/                 # Utility libraries
 │   ├── analytics.ts     # Analytics configuration
 │   ├── csrf.ts         # CSRF protection
@@ -72,6 +78,16 @@ riley-day-care/
 ├── styles/             # Global CSS
 └── .env.example        # Environment variables template
 ```
+
+## Testing Layout
+
+The repository now treats `testing-infrastructure/` as the canonical test root.
+
+- `testing-infrastructure/unit/` contains the Vitest suites that `vitest.config.mts` executes.
+- `testing-infrastructure/e2e/features/` contains the Playwright suites that `playwright.config.ts` executes.
+- `testing-infrastructure/artifacts/` is the single generated output root for coverage, JSON reports, HTML reports, screenshots, traces, and videos.
+
+Legacy root folders such as `__tests__/` and `e2e/` remain in the workspace today, but the active test configs do not target them.
 
 ## 🔧 Key Features
 
@@ -144,6 +160,12 @@ npm run dev
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run test:run` - Run the canonical Vitest suite under `testing-infrastructure/unit/`
+- `npm run test:coverage` - Generate unit coverage in `testing-infrastructure/artifacts/coverage`
+- `npm run test:e2e` - Run the canonical Playwright suite under `testing-infrastructure/e2e/features/`
+- `npm run test:cache-stats` - Print cache metadata for the testing utilities
+- `npm run test:parallel-stats` - Print execution statistics for the parallel test planner
+- `npm run test:clean` - Remove generated test artifacts from both canonical and legacy output folders
 
 ## 🔒 Environment Variables
 

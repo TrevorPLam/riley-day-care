@@ -102,6 +102,7 @@ export default function EnrollmentPageClient() {
                   return;
                 }
 
+                  const messageText =
                   json?.error ||
                   "We could not submit your request. Please check your details and try again.";
                 setError(messageText);

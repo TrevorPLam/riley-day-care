@@ -28,7 +28,7 @@ export default function EnrollmentError({
           There was an issue with the enrollment form. Please try again or contact us directly if the problem persists.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button onClick={unstable_retry} variant="primary">
+          <Button onClick={reset} variant="primary">
             Try again
           </Button>
           <Link href="/contact" className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-light">
