@@ -13,7 +13,7 @@ test.describe('Enrollment Flow - Enterprise Grade', () => {
     
     await enrollmentPage.fillEnrollmentForm(validData)
     await enrollmentPage.submitForm()
-    await enrollmentPage.verifySubmissionSuccess()
+    await enrollmentPage.waitForSuccessMessage()
     
     // Verify accessibility after submission
     await expect(enrollmentPage.page.locator('body')).toBeAccessible()
