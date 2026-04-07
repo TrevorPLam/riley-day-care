@@ -78,12 +78,16 @@ export const waitFor = (condition: () => boolean, timeout = 5000) => {
     const startTime = Date.now()
     
     const check = () => {
-      if (condition()) {
-        resolve(true)
-      } else if (Date.now() - startTime > timeout) {
-        reject(new Error('Timeout waiting for condition'))
-      } else {
-        setTimeout(check, 100)
+      try {
+        if (condition()) {
+          resolve(true)
+        } else if (Date.now() - startTime > timeout) {
+          reject(new Error('Timeout waiting for condition'))
+        } else {
+          setTimeout(check, 100)
+        }
+      } catch (error) {
+        reject(error instanceof Error ? error : new Error(String(error)))
       }
     }
     
