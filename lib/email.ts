@@ -40,10 +40,12 @@ export interface EnrollmentEmailPayload {
   userAgent?: string | null;
 }
 
-export async function sendEnrollmentEmail(payload: EnrollmentEmailPayload) {
+export async function sendEnrollmentEmail(payload: EnrollmentEmailPayload): Promise<boolean> {
   if (!ENROLLMENT_NOTIFICATIONS_TO || !transporter) {
-    return;
+    console.error("[email] Service not configured");
+    return false;
   }
+
 
   const from = ENROLLMENT_NOTIFICATIONS_FROM || ENROLLMENT_NOTIFICATIONS_TO;
 
