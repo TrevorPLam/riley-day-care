@@ -338,35 +338,46 @@ export function validateAllThresholds(
   const allFailures: string[] = []
   const categoryResults: Record<string, { passed: boolean; failures: string[] }> = {}
 
-  // Validate coverage if provided
+  const requiredCategories: (keyof QualityThresholds)[] = [
+    'coverage',
+    'performance',
+    'reliability',
+    'security',
+    'accessibility'
+  ]
+
+  for (const category of requiredCategories) {
+    if (!actual[category]) {
+      const message = `Missing required metrics for ${category}`
+      allFailures.push(message)
+      categoryResults[category] = { passed: false, failures: [message] }
+    }
+  }
+
   if (actual.coverage) {
     const result = validateCoverage(actual.coverage, expected.coverage)
     categoryResults.coverage = result
     allFailures.push(...result.failures)
   }
 
-  // Validate performance if provided
   if (actual.performance) {
     const result = validatePerformance(actual.performance, expected.performance)
     categoryResults.performance = result
     allFailures.push(...result.failures)
   }
 
-  // Validate reliability if provided
   if (actual.reliability) {
     const result = validateReliability(actual.reliability, expected.reliability)
     categoryResults.reliability = result
     allFailures.push(...result.failures)
   }
 
-  // Validate security if provided
   if (actual.security) {
     const result = validateSecurity(actual.security, expected.security)
     categoryResults.security = result
     allFailures.push(...result.failures)
   }
 
-  // Validate accessibility if provided
   if (actual.accessibility) {
     const result = validateAccessibility(actual.accessibility, expected.accessibility)
     categoryResults.accessibility = result
