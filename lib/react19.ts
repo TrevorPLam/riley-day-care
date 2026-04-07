@@ -47,7 +47,7 @@ export function createResource<T>(promise: Promise<T>): Resource<T> {
 
 // Hook for using resources with Suspense
 export function useResource<T>(resource: Resource<T>): T {
-  return use(resource);
+  return resource.read();
 }
 
 // Enhanced data fetching with React 19 use API
