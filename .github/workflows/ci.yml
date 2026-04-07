@@ -378,7 +378,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to Production
     needs: [unit-tests, e2e-tests, visual-tests, accessibility-tests]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: |
+      !failure() && !cancelled() &&
+      github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: production
       url: https://rileydaycare.com
