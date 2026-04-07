@@ -1,5 +1,6 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { env, isDevelopment } from "./env";
 
 // Initialize Redis connection with environment variables
 // Falls back to in-memory storage if Redis is not available (fail open)
@@ -24,7 +25,7 @@ export function getClientIdentifier(request: Request): string {
   const testRunId = request.headers.get("x-playwright-test-run");
 
   if (
-    process.env.NODE_ENV !== "production" &&
+    isDevelopment &&
     /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host) &&
     testRunId &&
     /^[a-zA-Z0-9-]{1,64}$/.test(testRunId)

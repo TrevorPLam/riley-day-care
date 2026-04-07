@@ -1,0 +1,29 @@
+{
+  "entry": ["app/**/*.tsx", "app/**/*.ts", "next.config.mjs"],
+  "project": ["**/*.{ts,tsx,js,jsx,mjs}"],
+  "ignore": [
+    "**/*.d.ts",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "node_modules/**",
+    ".next/**",
+    "testing-infrastructure/artifacts/**",
+    "coverage/**"
+  ],
+  "ignoreDependencies": [
+    "@types/*",
+    "@next/bundle-analyzer"
+  ],
+  "rules": {
+    "dependencies": "error",
+    "unlisted": "error",
+    "exports": "error",
+    "files": "error",
+    "binaries": "off",
+    "duplicates": "error",
+    "types": "error",
+    "enumMembers": "error"
+  }
+}

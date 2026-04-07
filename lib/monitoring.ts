@@ -395,12 +395,8 @@ export const applicationMonitoring = {
       },
     });
 
-    // Track as custom metric
-    Sentry.metrics.increment('user_journey.event', 1, {
-      event_type: event.eventType,
-      event_name: event.eventName,
-      path: event.path,
-    });
+    // Track as custom metric (removed due to TypeScript compatibility issues)
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     return fullEvent;
   },
@@ -457,16 +453,11 @@ export const applicationMonitoring = {
    * Track API performance
    */
   trackAPIPerformance: (endpoint: string, duration: number, statusCode: number) => {
-    Sentry.metrics.timing('api.request_duration', duration, {
-      endpoint,
-      status_code: statusCode.toString(),
-    });
+    // Sentry metrics tracking removed due to TypeScript compatibility issues
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     if (statusCode >= 400) {
-      Sentry.metrics.increment('api.error_count', 1, {
-        endpoint,
-        status_code: statusCode.toString(),
-      });
+      // Error tracking can be added back when API is updated
     }
   },
 
@@ -495,11 +486,8 @@ export const webVitalsMonitoring = {
   trackWebVital: (metric: PerformanceMetric) => {
     const rating = metric.rating;
     
-    // Send to Sentry as performance metric
-    Sentry.metrics.gauge(`web_vitals.${metric.name.toLowerCase()}`, metric.value, {
-      rating,
-      navigation_type: metric.navigationType,
-    });
+    // Send to Sentry as performance metric (removed due to TypeScript compatibility issues)
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     // Add breadcrumb for poor performance
     if (rating === 'poor') {
@@ -561,11 +549,8 @@ export const errorMonitoring = {
       },
     });
 
-    // Track error metrics
-    Sentry.metrics.increment('errors.count', 1, {
-      category: errorCategory,
-      error_type: error.name,
-    });
+    // Track error metrics (removed due to TypeScript compatibility issues)
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     return errorCategory;
   },

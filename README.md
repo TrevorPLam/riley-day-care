@@ -35,6 +35,8 @@ A modern, responsive Next.js 15 marketing website for **Riley Day Care**, a lice
 - **ESLint 8.57.0** - Code linting and quality
 - **PostCSS 8.4.0** - CSS processing
 - **Autoprefixer 10.4.0** - CSS vendor prefixes
+- **Knip** - Find unused files, dependencies, and exports
+- **Bundle Analyzer** - Visualize bundle size and dependencies
 
 ## Project Structure
 
@@ -177,6 +179,56 @@ npm run dev
 
 1. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Developer Experience (DX) Tools
+
+This project includes tools to maintain code quality and monitor bundle size:
+
+### Code Analysis with Knip
+
+**Knip** finds unused files, dependencies, and exports in your TypeScript/JavaScript project.
+
+```bash
+# Run Knip to find unused code
+npm run knip
+
+# Run comprehensive DX check (Knip + lint + tests)
+npm run dx-check
+```
+
+**Configuration**: `knip.json` - Configured for Next.js App Router structure
+
+**What Knip finds**:
+- Unused dependencies in package.json
+- Unused exports and files
+- Duplicate dependencies
+- Unlisted dependencies
+
+### Bundle Size Analysis
+
+**Bundle Analyzer** visualizes your JavaScript bundles to identify size issues.
+
+```bash
+# Analyze bundle size (generates HTML reports)
+npm run analyze
+
+# Reports are saved to .next/analyze/
+# Open client.html, edge.html, and nodejs.html in your browser
+```
+
+**Configuration**: Integrated in `next.config.mjs` with Sentry
+
+**Environment**: Only runs when `ANALYZE=true` is set
+
+### DX Workflow
+
+Recommended workflow before committing changes:
+
+1. **Code Quality**: `npm run lint`
+2. **Type Safety**: `npm run test:run` (runs unit tests)
+3. **Unused Code**: `npm run knip`
+4. **Bundle Size**: `npm run analyze` (before major releases)
+5. **All-in-One**: `npm run dx-check`
+
 ## Available Scripts
 
 ### Development & Production
@@ -185,6 +237,12 @@ npm run dev
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+
+### Developer Experience (DX)
+
+- `npm run knip` - Find unused files, dependencies, and exports
+- `npm run analyze` - Analyze bundle size with visual reports
+- `npm run dx-check` - Run comprehensive DX check (Knip + lint + tests)
 
 ### Unit Testing (Vitest)
 

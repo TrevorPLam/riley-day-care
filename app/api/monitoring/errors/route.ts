@@ -51,12 +51,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Track error reporting metrics
-    Sentry.metrics.increment('errors.manual_reports', 1, {
-      category: category || 'manual_report',
-      severity: severity || 'medium',
-    });
-
     // Add breadcrumb for manual error reporting
     Sentry.addBreadcrumb({
       message: `Manual Error Report: ${error.message}`,
@@ -131,10 +125,8 @@ export async function GET(request: NextRequest) {
       },
     };
 
-    // Track API metrics
-    Sentry.metrics.timing('api.error_monitoring.duration', 0, {
-      endpoint: '/api/monitoring/errors',
-    });
+    // Track API metrics (removed due to TypeScript compatibility issues)
+    // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
     return NextResponse.json({
       timestamp: new Date().toISOString(),
@@ -171,10 +163,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Error data cleared via API',
       category: 'error_management',
       level: 'info',
-    });
-
-    Sentry.metrics.increment('errors.data_cleared', 1, {
-      endpoint: '/api/monitoring/errors',
     });
 
     return NextResponse.json({

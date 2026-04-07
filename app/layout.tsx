@@ -6,10 +6,10 @@ import { Container } from "@/components/layout/Container";
 import { getLocalBusinessJsonLd } from "@/lib/seo/structuredData";
 import PlausibleProvider from "next-plausible";
 import { WebVitalsReporter } from "@/components/monitoring/WebVitalsReporter";
+import { env } from "@/lib/env";
+import { reportWebVitals } from "@/lib/performance";
 
-const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-const siteUrl =
-  rawSiteUrl && URL.canParse(rawSiteUrl) ? rawSiteUrl : "https://example.com";
+const siteUrl = env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -104,4 +104,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
+
+// Export reportWebVitals for Next.js Web Vitals integration
+export { reportWebVitals as webVitals };
 

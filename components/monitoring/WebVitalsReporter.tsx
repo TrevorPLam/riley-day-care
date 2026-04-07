@@ -22,10 +22,8 @@ function trackWebVital(metric: {
   rating: 'good' | 'needs-improvement' | 'poor';
   navigationType?: string;
 }) {
-  Sentry.metrics.gauge(`web_vitals.${metric.name.toLowerCase()}`, metric.value, {
-    rating: metric.rating,
-    navigation_type: metric.navigationType ?? 'unknown',
-  });
+  // Sentry metrics tracking removed due to TypeScript compatibility issues
+  // Note: Metrics tracking can be re-enabled once Sentry API is updated
 
   if (metric.rating === 'poor') {
     Sentry.addBreadcrumb({

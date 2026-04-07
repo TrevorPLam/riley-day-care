@@ -3,13 +3,13 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
+import { env, isProduction } from "./lib/env";
 
-const isProduction = process.env.NODE_ENV === "production";
 const tracesSampleRate = isProduction ? 0.1 : 1;
-const sendDefaultPii = process.env.SENTRY_SEND_DEFAULT_PII === "true";
+const sendDefaultPii = env.SENTRY_SEND_DEFAULT_PII === true;
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN,
+  dsn: env.SENTRY_DSN ?? env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Define how likely traces are sampled. Use full sampling outside production and a reduced rate in production.
   tracesSampleRate,
