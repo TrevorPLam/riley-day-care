@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { Container } from "@/components/layout/Container";
 import { getLocalBusinessJsonLd } from "@/lib/seo/structuredData";
 import PlausibleProvider from "next-plausible";
+import { WebVitalsReporter } from "@/components/monitoring/WebVitalsReporter";
 
 const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const siteUrl =
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="bg-white text-slate-900">
+        <WebVitalsReporter />
         <PlausibleProvider src={`${process.env.PLAUSIBLE_API_HOST ?? "https://plausible.io"}/js/script.js`}>
         <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/90 backdrop-blur">
           <Container className="flex h-16 items-center justify-between gap-4">

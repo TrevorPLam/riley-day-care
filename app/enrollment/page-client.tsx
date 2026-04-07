@@ -162,8 +162,8 @@ export default function EnrollmentPageClient() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-              <Button type="submit" disabled={isPending || !csrfToken}>
-                {isPending ? "Submitting..." : !csrfToken ? "Loading..." : "Submit request"}
+              <Button type="submit" useFormStatusPending={true}>
+                Submit request
               </Button>
               <div className="min-h-[1.5rem]" aria-live="polite" id="enrollment-error">
                 {state.success ? (

@@ -42,6 +42,7 @@
     "playwright:update": "playwright install --force"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.47.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",
     "next": "15.1.6",
