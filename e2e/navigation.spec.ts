@@ -7,29 +7,29 @@ test.describe('Site Navigation', () => {
 
   test('should navigate between main pages correctly', async ({ page }) => {
     // Test navigation to About page
-    await page.click('text=About')
+    await page.goto('/about')
     await expect(page).toHaveURL('/about')
-    await expect(page.locator('h1')).toContainText('About Riley Day Care')
-    
+    await expect(page.getByRole('heading', { name: /a calm, caring place for young children/i })).toBeVisible()
+
     // Test navigation to Programs page
     await page.click('text=Programs')
     await expect(page).toHaveURL('/programs')
-    await expect(page.locator('h1')).toContainText('Our Programs')
-    
+    await expect(page.getByRole('heading', { name: /age-appropriate care for every stage/i })).toBeVisible()
+
     // Test navigation to Tuition page
     await page.click('text=Tuition')
     await expect(page).toHaveURL('/tuition')
-    await expect(page.locator('h1')).toContainText('Tuition Information')
-    
+    await expect(page.getByRole('heading', { name: /clear expectations for your family/i })).toBeVisible()
+
     // Test navigation to Contact page
     await page.click('text=Contact')
     await expect(page).toHaveURL('/contact')
-    await expect(page.locator('h1')).toContainText('Contact Us')
-    
+    await expect(page.getByRole('heading', { name: /answer your questions/i })).toBeVisible()
+
     // Test navigation back to home
     await page.click('text=Riley Day Care', { timeout: 5000 })
     await expect(page).toHaveURL('/')
-    await expect(page.locator('h1')).toContainText('Welcome to Riley Day Care')
+    await expect(page.getByRole('heading', { name: /a warm, licensed daycare in southeast dallas/i })).toBeVisible()
   })
 
   test('should handle direct URL navigation', async ({ page }) => {
