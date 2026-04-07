@@ -32,7 +32,6 @@ export async function GET(request: NextRequest) {
       operations: recentOperations,
       webVitals,
       errors: errorMetrics,
-      system: getSystemMetrics(),
     };
 
     // Track API performance
