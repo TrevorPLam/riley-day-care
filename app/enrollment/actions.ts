@@ -34,7 +34,9 @@ export async function submitEnrollment(
   }
 
   // Rate limiting
-  const identifier = getClientIdentifier({ headers: {} } as Request);
+  const identifier = getClientIdentifier(
+    new Request("http://localhost", { headers: new Headers() })
+  );
   const { success } = await enrollmentRateLimit.limit(identifier);
   
   if (!success) {
