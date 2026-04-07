@@ -9,8 +9,15 @@ import * as Sentry from '@sentry/nextjs';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    
+    const body = await request.json().catch(() => null);
+
+        if (!body || typeof body !== 'object') {
+          return NextResponse.json(
+            { error: 'Invalid JSON body provided' },
+            { status: 400 }
+          );
+        }
+
     const { error, context, category, severity } = body;
     
     if (!error || !error.message) {
